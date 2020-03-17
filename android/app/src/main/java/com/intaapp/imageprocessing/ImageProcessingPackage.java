@@ -1,4 +1,4 @@
-package com.testubuntu.testnative;
+package com.intaapp.imageprocessing;
 
 import androidx.annotation.NonNull;
 
@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class TestLibraryPackage implements ReactPackage {
+public class ImageProcessingPackage implements ReactPackage {
     @NonNull
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
-        return Arrays.<NativeModule>asList(new TestNativeModule(reactContext));
+        return Arrays.<NativeModule>asList(new ImageProcessingModule(reactContext));
     }
 
     @NonNull

@@ -1,9 +1,6 @@
-package com.testubuntu.testnative;
-
-import android.util.Log;
+package com.intaapp.imageprocessing;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -11,11 +8,11 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import org.opencv.core.Core;
 
-public class TestNativeModule extends ReactContextBaseJavaModule {
+public class ImageProcessingModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext context;
 
-    public TestNativeModule(@NonNull ReactApplicationContext reactContext) {
+    public ImageProcessingModule(@NonNull ReactApplicationContext reactContext) {
         super(reactContext);
         this.context = reactContext;
     }
