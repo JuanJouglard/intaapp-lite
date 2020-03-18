@@ -5,14 +5,13 @@ import {NativeModules} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 
 class App extends PureComponent {
-  res = NativeModules.NativeOpenCV.test().then(console.log);
   camera;
 
   takePicture = async () => {
     if (this.camera) {
       const options = {quality: 0.5, base64: true};
       const data = await this.camera.takePictureAsync(options);
-      console.log(data.uri);
+      msg = NativeModules.NativeOpenCV.processImage(data.uri).then(console.log);
     }
   };
 
