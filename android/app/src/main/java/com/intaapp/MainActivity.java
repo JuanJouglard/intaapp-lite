@@ -1,4 +1,4 @@
-package com.testubuntu;
+package com.intaapp;
 
 import com.facebook.react.ReactActivity;
 

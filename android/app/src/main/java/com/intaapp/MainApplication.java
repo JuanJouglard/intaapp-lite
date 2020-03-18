@@ -1,4 +1,4 @@
-package com.testubuntu;
+package com.intaapp;
 
 import android.app.Application;
 import android.content.Context;
@@ -9,7 +9,7 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.testubuntu.testnative.TestLibraryPackage;
+import com.intaapp.imageprocessing.ImageProcessingPackage;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -47,7 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          packages.add(new TestLibraryPackage());
+          packages.add(new ImageProcessingPackage());
           return packages;
         }
 
