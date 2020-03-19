@@ -23,8 +23,17 @@ class CameraView extends PureComponent {
         pauseAfterCapture: true,
       };
       const data = await this.camera.takePictureAsync(options);
-      const msg = await NativeModules.NativeOpenCV.processImage(data.uri);
-      this.setState({base64: msg});
+      const {img, percentage} = await NativeModules.NativeOpenCV.processImage(
+        data.uri,
+        [40, 50, 20],
+        [70, 255, 255],
+        //[25, 50, 20], YELLOW
+        //[40, 255, 255], YELLOW
+        //[0, 5, 50], GRAY
+        //[179, 50, 255], GRAY
+      );
+      console.log('percentage', percentage);
+      this.setState({base64: img});
     }
   };
 
@@ -42,7 +51,7 @@ class CameraView extends PureComponent {
       return (
         <>
           <Camera
-            ref={ref => {
+            refer={ref => {
               this.camera = ref;
             }}
           />
