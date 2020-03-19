@@ -4,12 +4,13 @@ export class ImagePickerService {
   instance;
 
   options = {
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
+    mediaType: 'photo',
+    cameraType: 'back',
     rotation: 360,
     quality: 1,
+    noData: true,
+    maxWidth: 1920,
+    maxHeigth: 1920,
   };
 
   static getInstance() {
@@ -22,7 +23,7 @@ export class ImagePickerService {
   getImageFromCamera() {
     const result = new Promise((resolve, reject) => {
       ImagePicker.launchCamera(this.options, response => {
-        // console.log('Response = ', response);
+        console.log('Response = ', response);
 
         if (response.didCancel) {
           console.log('User cancelled image picker');
@@ -33,7 +34,7 @@ export class ImagePickerService {
           //alert(response.customButton);
         } else {
           console.log(
-            'GalleryPicker -> launchCamera -> response.uri',
+            'CameraPicker -> launchCamera -> response.uri',
             response.uri,
           );
           resolve(response.uri);

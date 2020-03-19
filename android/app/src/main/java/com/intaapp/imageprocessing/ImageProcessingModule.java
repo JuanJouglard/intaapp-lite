@@ -1,5 +1,6 @@
 package com.intaapp.imageprocessing;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +24,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import android.util.Base64;
 
@@ -63,6 +65,7 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             byte[] array = imgBase64.toByteArray();
 
             String str = Base64.encodeToString(array,Base64.DEFAULT);
+
             promise.resolve(str);
             
         } catch (IOException e) {
@@ -71,4 +74,21 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
         }
 
     }
+
+    private String getFilePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getReactApplicationContext().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            String picturePath = cursor.getString(columnIndex); // returns null
+            cursor.close();
+            return picturePath;
+        }
+        return null;
+    }
+
+
 }

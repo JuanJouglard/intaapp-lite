@@ -14,6 +14,7 @@ import {
 
 import {NativeModules} from 'react-native';
 import {ImagePickerService} from '../../shared/services/imagePickerService';
+import RNFS from 'react-native-fs';
 
 export class GalleryPicker extends Component {
   picker;
@@ -30,12 +31,14 @@ export class GalleryPicker extends Component {
     const uri = await this.picker.getImageFromCamera();
     const msg = await NativeModules.NativeOpenCV.processImage(uri);
     this.setState({base64: msg});
+    RNFS.unlink(uri);
   };
 
   launchImageLibrary = async () => {
     const uri = await this.picker.getImageFromGallery();
     const msg = await NativeModules.NativeOpenCV.processImage(uri);
     this.setState({base64: msg});
+    RNFS.unlink(uri).then(() => RNFS.scanFile(uri));
   };
 
   render() {
