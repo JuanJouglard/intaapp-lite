@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import ImagePicker from 'react-native-image-picker';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,120 +13,82 @@ import {
 } from 'react-native';
 
 import {NativeModules} from 'react-native';
+import {ImagePickerService} from '../../shared/services/imagePickerService';
 
 export class GalleryPicker extends Component {
+  picker;
+
   constructor(props) {
     super(props);
+    this.state = {
+      base64: null,
+    };
+    this.picker = ImagePickerService.getInstance();
   }
 
-  launchCamera = () => {
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.launchCamera(options, async response => {
-      // console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        //alert(response.customButton);
-      } else {
-        const source = {uri: response.uri};
-        //console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri,
-        });
-        console.log(
-          'GalleryPicker -> launchCamera -> response.uri',
-          response.uri,
-        );
-        const msg = await NativeModules.NativeOpenCV.processImage(response.uri);
-
-        console.log('GalleryPicker -> launchCamera -> const msg', msg);
-      }
-    });
+  launchCamera = async () => {
+    const uri = await this.picker.getImageFromCamera();
+    const msg = await NativeModules.NativeOpenCV.processImage(uri);
+    this.setState({base64: msg});
   };
 
-  launchImageLibrary = () => {
-    let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    ImagePicker.launchImageLibrary(options, async response => {
-      //console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-        //alert(response.customButton);
-      } else {
-        const source = {uri: response.uri};
-        console.log('response', JSON.stringify(response));
-        this.setState({
-          filePath: response,
-          fileData: response.data,
-          fileUri: response.uri,
-        });
-        const msg = await NativeModules.NativeOpenCV.processImage(response.uri);
-
-        console.log('GalleryPicker -> launchCamera -> const msg', msg);
-      }
-    });
+  launchImageLibrary = async () => {
+    const uri = await this.picker.getImageFromGallery();
+    const msg = await NativeModules.NativeOpenCV.processImage(uri);
+    this.setState({base64: msg});
   };
 
   render() {
-    return (
-      <Fragment>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-          <View style={styles.body}>
-            <Text
-              style={{textAlign: 'center', fontSize: 20, paddingBottom: 10}}>
-              Pick Images from Camera & Gallery
-            </Text>
-            {/* <View style={styles.ImageSections}>
-              <View>
-                {this.renderFileData()}
-                <Text  style={{textAlign:'center'}}>Base 64 String</Text>
-              </View>
-              <View>
-                {this.renderFileUri()}
-                <Text style={{textAlign:'center'}}>File Uri</Text>
-              </View>
-            </View> */}
+    if (this.state.base64) {
+      return (
+        <View style={{flex: 1}}>
+          <Image
+            style={{flex: 1, borderColor: 'black', borderWidth: 5, margin: 10}}
+            source={{uri: `data:image/png;base64,${this.state.base64}`}}
+          />
+        </View>
+      );
+    } else {
+      return (
+        <Fragment>
+          <StatusBar barStyle="dark-content" />
+          <SafeAreaView>
+            <View style={styles.body}>
+              <Text
+                style={{textAlign: 'center', fontSize: 20, paddingBottom: 10}}>
+                Pick Images from Camera & Gallery
+              </Text>
+              {/* <View style={styles.ImageSections}>
+                <View>
+                  {this.renderFileData()}
+                  <Text  style={{textAlign:'center'}}>Base 64 String</Text>
+                </View>
+                <View>
+                  {this.renderFileUri()}
+                  <Text style={{textAlign:'center'}}>File Uri</Text>
+                </View>
+              </View> */}
 
-            <View style={styles.btnParentSection}>
-              <TouchableOpacity
-                onPress={this.launchCamera}
-                style={styles.btnSection}>
-                <Text style={styles.btnText}>Directly Launch Camera</Text>
-              </TouchableOpacity>
+              <View style={styles.btnParentSection}>
+                <TouchableOpacity
+                  onPress={this.launchCamera}
+                  style={styles.btnSection}>
+                  <Text style={styles.btnText}>Directly Launch Camera</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={this.launchImageLibrary}
-                style={styles.btnSection}>
-                <Text style={styles.btnText}>
-                  Directly Launch Image Library
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={this.launchImageLibrary}
+                  style={styles.btnSection}>
+                  <Text style={styles.btnText}>
+                    Directly Launch Image Library
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </SafeAreaView>
-      </Fragment>
-    );
+          </SafeAreaView>
+        </Fragment>
+      );
+    }
   }
 }
 
