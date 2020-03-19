@@ -1,5 +1,6 @@
 package com.intaapp.imageprocessing;
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +28,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import android.util.Base64;
 
@@ -81,11 +83,27 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             wm.putString("img",str);
             wm.putDouble("percentage",percentage);
             promise.resolve(wm);
-            
         } catch (IOException e) {
             promise.reject("OpenCv","Cannot read processed image from memory");
             e.printStackTrace();
         }
 
     }
+
+    private String getFilePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+
+        Cursor cursor = getReactApplicationContext().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            String picturePath = cursor.getString(columnIndex); // returns null
+            cursor.close();
+            return picturePath;
+        }
+        return null;
+    }
+
+
 }

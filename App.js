@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import CameraView from './src/core/components/CameraView';
+import {GalleryPicker} from './src/core/components/GalleryPicker';
 
 class App extends PureComponent {
   constructor(props) {
@@ -9,7 +10,7 @@ class App extends PureComponent {
   render() {
     return (
       <>
-        <CameraView />
+        <GalleryPicker />
       </>
     );
   }
