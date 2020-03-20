@@ -14,7 +14,11 @@ class App extends PureComponent {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="Imagen" component={ImageView} />
         </Stack.Navigator>
       </NavigationContainer>
