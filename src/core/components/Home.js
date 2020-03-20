@@ -12,13 +12,16 @@ import {
 } from 'native-base';
 import {ImagePickerService} from '../../shared/services/imagePickerService';
 import {StyleSheet, NativeModules} from 'react-native';
+import {ImageProcessor} from '../../shared/services/imageProcessor';
 
 export class Home extends Component {
   picker;
+  imageProcessor;
 
   constructor(props) {
     super(props);
     this.picker = ImagePickerService.getInstance();
+    this.imageProcessor = ImageProcessor.getInstance();
   }
 
   render() {
@@ -54,15 +57,7 @@ export class Home extends Component {
 
   launchCamera = async () => {
     const uriImage = await this.picker.getImageFromCamera();
-    const {img, percentage} = await NativeModules.NativeOpenCV.processImage(
-      uriImage,
-      [40, 50, 20],
-      [70, 255, 255],
-      //[25, 50, 20], YELLOW
-      //[40, 255, 255], YELLOW
-      //[0, 5, 50], GRAY
-      //[179, 50, 255], GRAY
-    );
+    const {img, percentage} = await this.imageProcessor.processImage(uriImage);
     this.props.navigation.navigate('Imagen', {
       image: img,
     });
@@ -70,15 +65,7 @@ export class Home extends Component {
 
   launchGallery = async () => {
     const uriImage = await this.picker.getImageFromGallery();
-    const {img, percentage} = await NativeModules.NativeOpenCV.processImage(
-      uriImage,
-      [40, 50, 20],
-      [70, 255, 255],
-      //[25, 50, 20], YELLOW
-      //[40, 255, 255], YELLOW
-      //[0, 5, 50], GRAY
-      //[179, 50, 255], GRAY
-    );
+    const {img, percentage} = await this.imageProcessor.processImage(uriImage);
     this.props.navigation.navigate('Imagen', {
       image: img,
     });
