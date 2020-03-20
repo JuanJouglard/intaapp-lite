@@ -23,20 +23,11 @@ export class ImagePickerService {
   getImageFromCamera() {
     const result = new Promise((resolve, reject) => {
       ImagePicker.launchCamera(this.options, response => {
-        console.log('Response = ', response);
-
         if (response.didCancel) {
           console.log('User cancelled image picker');
         } else if (response.error) {
           console.log('ImagePicker Error: ', response.error);
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
-          //alert(response.customButton);
         } else {
-          console.log(
-            'CameraPicker -> launchCamera -> response.uri',
-            response.uri,
-          );
           resolve(response.uri);
         }
       });
@@ -54,9 +45,6 @@ export class ImagePickerService {
           console.log('User cancelled image picker');
         } else if (response.error) {
           console.log('ImagePicker Error: ', response.error);
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton);
-          //alert(response.customButton);
         } else {
           resolve(response.uri);
         }
