@@ -3,19 +3,15 @@ import {
   CardItem,
   Container,
   Header,
+  Icon,
   Title,
   Content,
-  Footer,
-  FooterTab,
-  Button,
-  Left,
   Right,
   Body,
-  Icon,
   Text,
 } from 'native-base';
 import {ImagePickerService} from '../../shared/services/imagePickerService';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, NativeModules} from 'react-native';
 
 export class Home extends Component {
   picker;
@@ -40,6 +36,7 @@ export class Home extends Component {
             header
             button
             onPress={this.launchCamera}>
+            <Icon name="camera" />
             <Text>Tomar una foto con la camara</Text>
           </CardItem>
           <CardItem
@@ -47,6 +44,7 @@ export class Home extends Component {
             header
             button
             onPress={this.launchGallery}>
+            <Icon name="camera" />
             <Text>Seleccionar foto de la galeria</Text>
           </CardItem>
         </Content>
@@ -54,12 +52,36 @@ export class Home extends Component {
     );
   }
 
-  launchCamera = () => {
-    this.picker.getImageFromCamera();
+  launchCamera = async () => {
+    const uriImage = await this.picker.getImageFromCamera();
+    const {img, percentage} = await NativeModules.NativeOpenCV.processImage(
+      uriImage,
+      [40, 50, 20],
+      [70, 255, 255],
+      //[25, 50, 20], YELLOW
+      //[40, 255, 255], YELLOW
+      //[0, 5, 50], GRAY
+      //[179, 50, 255], GRAY
+    );
+    this.props.navigation.navigate('Imagen', {
+      image: img,
+    });
   };
 
-  launchGallery = () => {
-    this.picker.getImageFromGallery();
+  launchGallery = async () => {
+    const uriImage = await this.picker.getImageFromGallery();
+    const {img, percentage} = await NativeModules.NativeOpenCV.processImage(
+      uriImage,
+      [40, 50, 20],
+      [70, 255, 255],
+      //[25, 50, 20], YELLOW
+      //[40, 255, 255], YELLOW
+      //[0, 5, 50], GRAY
+      //[179, 50, 255], GRAY
+    );
+    this.props.navigation.navigate('Imagen', {
+      image: img,
+    });
   };
 }
 
@@ -71,5 +93,6 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
+    flexDirection: 'column',
   },
 });
