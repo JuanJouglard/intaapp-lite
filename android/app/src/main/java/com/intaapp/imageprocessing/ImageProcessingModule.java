@@ -48,28 +48,44 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void processImage(String fileUri, ReadableArray lowerBound, ReadableArray upperBound, Promise promise) {
+    public void processImage(String fileUri, ReadableArray firstRange, ReadableArray secondRange, Promise promise) {
 
 
         try {
+            ReadableArray firstLower = firstRange.getArray(0);
+            ReadableArray firstUpper = firstRange.getArray(1);
+            ReadableArray secondLower = secondRange.getArray(0);
+            ReadableArray secondUpper = secondRange.getArray(1);
             Bitmap img = Bitmap.createBitmap(MediaStore.Images.Media.getBitmap(getReactApplicationContext().getContentResolver(), Uri.parse(fileUri)));
             Mat mat= new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC4);
             Utils.bitmapToMat(img,mat);
 
             Mat result = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
-            Mat maskFinal = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+            Mat firstMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+            Mat secondMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+            Mat finalMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
             Imgproc.cvtColor(mat,result,Imgproc.COLOR_RGB2HSV);
 
             //Core.inRange(result,new Scalar(55,50,20),new Scalar(143,255,255),maskFinal);
             Core.inRange(result,
-                    new Scalar(lowerBound.getInt(0),lowerBound.getInt(1),lowerBound.getInt(2)),
-                    new Scalar(upperBound.getInt(0),upperBound.getInt(1),upperBound.getInt(2)),
-                    maskFinal);
+                    new Scalar(firstLower.getInt(0),firstLower.getInt(1),firstLower.getInt(2)),
+                    new Scalar(firstUpper.getInt(0),firstUpper.getInt(1),firstUpper.getInt(2)),
+                    firstMask);
 
-            Core.bitwise_and(mat,mat,result,maskFinal);
-            int nonZero = Core.countNonZero(maskFinal);
+            Core.inRange(result,
+                    new Scalar(secondLower.getInt(0),secondLower.getInt(1),secondLower.getInt(2)),
+                    new Scalar(secondUpper.getInt(0),secondUpper.getInt(1),secondUpper.getInt(2)),
+                    secondMask);
+
+            Core.add(firstMask,secondMask,finalMask);
+            int nonZero = Core.countNonZero(firstMask);
             double percentage = nonZero*100/(img.getHeight()*img.getWidth());
+
+            int nonZero2 = Core.countNonZero(secondMask);
+            double percentage2 = nonZero*100/(img.getHeight()*img.getWidth());
             //Conversion to Base64
+
+            Core.bitwise_and(mat,mat,result,finalMask);
             Bitmap resultImg= img;
             Utils.matToBitmap(result,resultImg);
 
