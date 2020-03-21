@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 
 export class ImageView extends Component {
   constructor(props) {
@@ -8,24 +8,35 @@ export class ImageView extends Component {
 
   render() {
     return (
-      <Image
-        style={styles.image}
-        source={{
-          uri: `data:image/png;base64,${this.props.route.params.image}`,
-        }}
-      />
+      <View style={{flex: 1}}>
+        <View style={styles.container}>
+          <Image
+            resizeMode="contain"
+            style={styles.image}
+            source={{
+              uri: `data:image/png;base64,${this.props.route.params.image}`,
+            }}
+          />
+        </View>
+        <View style={styles.percentages}></View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+  },
   image: {
-    flex: 1,
-    height: 500,
-    width: 500,
-    borderColor: 'black',
-    borderWidth: 5,
-    margin: 10,
-    resizeMode: 'contain',
+    width: '100%',
+    height: '100%',
+  },
+  percentages: {
+    flex: 2,
   },
 });
