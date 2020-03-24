@@ -78,11 +78,11 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
                     secondMask);
 
             Core.add(firstMask,secondMask,finalMask);
-            int nonZero = Core.countNonZero(firstMask);
-            double percentage = nonZero*100/(img.getHeight()*img.getWidth());
+            int nonZeroGreen = Core.countNonZero(firstMask);
+            double percentageGreen = nonZeroGreen*100/(img.getHeight()*img.getWidth());
 
-            int nonZero2 = Core.countNonZero(secondMask);
-            double percentage2 = nonZero*100/(img.getHeight()*img.getWidth());
+            int nonZeroYellow = Core.countNonZero(secondMask);
+            double percentageYellow = nonZeroYellow*100/(img.getHeight()*img.getWidth());
             //Conversion to Base64
 
             Core.bitwise_and(mat,mat,result,finalMask);
@@ -97,7 +97,8 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             String str = Base64.encodeToString(array,Base64.DEFAULT);
             WritableMap wm = Arguments.createMap();
             wm.putString("img",str);
-            wm.putDouble("percentage",percentage);
+            wm.putDouble("percentageGreen",percentageGreen);
+            wm.putDouble("percentageYellow",percentageYellow);
             promise.resolve(wm);
         } catch (IOException e) {
             promise.reject("OpenCv","Cannot read processed image from memory");
