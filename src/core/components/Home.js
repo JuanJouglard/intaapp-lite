@@ -65,9 +65,15 @@ export class Home extends Component {
 
   launchGallery = async () => {
     const uriImage = await this.picker.getImageFromGallery();
-    const {img, percentage} = await this.imageProcessor.processImage(uriImage);
+    const {
+      img,
+      percentageGreen,
+      percentageYellow,
+    } = await this.imageProcessor.processImage(uriImage);
     this.props.navigation.navigate('Imagen', {
       image: img,
+      percentageGreen: percentageGreen,
+      percentageYellow: percentageYellow,
     });
   };
 }
