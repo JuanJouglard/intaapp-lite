@@ -1,17 +1,19 @@
-import React, {Component} from 'react';
 import {
+  Body,
   CardItem,
   Container,
+  Content,
   Header,
   Icon,
-  Title,
-  Content,
   Right,
-  Body,
   Text,
+  Title,
+  View,
+  Left,
 } from 'native-base';
+import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
 import {ImagePickerService} from '../../shared/services/imagePickerService';
-import {StyleSheet, NativeModules} from 'react-native';
 import {ImageProcessor} from '../../shared/services/imageProcessor';
 
 export class Home extends Component {
@@ -27,29 +29,40 @@ export class Home extends Component {
   render() {
     return (
       <Container>
-        <Header>
+        <Header style={{backgroundColor: '#1f2f33'}}>
+          <Left />
           <Body>
             <Title>INTA</Title>
           </Body>
           <Right />
         </Header>
         <Content contentContainerStyle={styles.container}>
-          <CardItem
-            style={styles.card}
-            header
-            button
-            onPress={this.launchCamera}>
-            <Icon name="camera" />
-            <Text>Tomar una foto con la camara</Text>
-          </CardItem>
-          <CardItem
-            style={styles.card}
-            header
-            button
-            onPress={this.launchGallery}>
-            <Icon name="camera" />
-            <Text>Seleccionar foto de la galeria</Text>
-          </CardItem>
+          <View style={styles.cardContainer}>
+            <CardItem
+              style={styles.card}
+              header
+              button
+              onPress={this.launchCamera}>
+              <Icon
+                type="FontAwesome5"
+                name="camera-retro"
+                style={styles.icon}
+              />
+              <Text style={styles.descText}>TOMAR UNA FOTO CON LA CAMARA</Text>
+            </CardItem>
+          </View>
+          <View style={styles.cardContainer}>
+            <CardItem
+              style={styles.card}
+              header
+              button
+              onPress={this.launchGallery}>
+              <Icon name="upload" type="AntDesign" style={styles.icon} />
+              <Text style={styles.descText}>
+                SELECCIONAR UNA FOTO DE LA GALERIA
+              </Text>
+            </CardItem>
+          </View>
         </Content>
       </Container>
     );
@@ -57,14 +70,10 @@ export class Home extends Component {
 
   launchCamera = async () => {
     const uriImage = await this.picker.getImageFromCamera();
-    const {img, percentage} = await this.imageProcessor.processImage(uriImage);
-    this.props.navigation.navigate('Imagen', {
-      image: img,
-    });
+    this.routeToImageView(uriImage);
   };
 
-  launchGallery = async () => {
-    const uriImage = await this.picker.getImageFromGallery();
+  async routeToImageView(uriImage) {
     const {
       img,
       percentageGreen,
@@ -75,6 +84,11 @@ export class Home extends Component {
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
     });
+  }
+
+  launchGallery = async () => {
+    const uriImage = await this.picker.getImageFromGallery();
+    this.routeToImageView(uriImage);
   };
 }
 
@@ -87,5 +101,24 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'center',
+    borderRadius: 15,
+    backgroundColor: 'rgba(31, 47, 51, 0.3)',
+  },
+  cardContainer: {
+    flex: 1,
+    padding: 25,
+  },
+  icon: {
+    fontSize: 64,
+    width: 'auto',
+    color: 'rgba(31, 47, 51, 1)',
+  },
+  descText: {
+    color: 'rgb(26, 40, 43)',
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    textAlign: 'center',
   },
 });
