@@ -4,6 +4,9 @@ import ProgressCircle from 'react-native-progress/Circle';
 export class ImageView extends Component {
   constructor(props) {
     super(props);
+    console.log('yellow', this.props.route.params.percentageYellow);
+    console.log('green', this.props.route.params.percentageGreen);
+    // console.log('image', this.props.route.params.image);
   }
 
   render() {

@@ -30,15 +30,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
 import android.util.Base64;
+
+import com.intaapp.imageprocessing.ImageProcessingOperations;
 
 public class ImageProcessingModule extends ReactContextBaseJavaModule {
 
-    private final ReactApplicationContext context;
+    private ReadableArray firstLower,firstUpper, secondLower,secondUpper;
+    private ImageProcessingOperations imageProcessingOperations;
 
     public ImageProcessingModule(@NonNull ReactApplicationContext reactContext) {
         super(reactContext);
-        this.context = reactContext;
+        imageProcessingOperations = new ImageProcessingOperations();
     }
 
     @NonNull
@@ -50,64 +55,85 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void processImage(String fileUri, ReadableArray firstRange, ReadableArray secondRange, Promise promise) {
 
-
         try {
-            ReadableArray firstLower = firstRange.getArray(0);
-            ReadableArray firstUpper = firstRange.getArray(1);
-            ReadableArray secondLower = secondRange.getArray(0);
-            ReadableArray secondUpper = secondRange.getArray(1);
-            Bitmap img = Bitmap.createBitmap(MediaStore.Images.Media.getBitmap(getReactApplicationContext().getContentResolver(), Uri.parse(fileUri)));
-            Mat mat= new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC4);
-            Utils.bitmapToMat(img,mat);
 
-            Mat result = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
-            Mat firstMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
-            Mat secondMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
-            Mat finalMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
-            Imgproc.cvtColor(mat,result,Imgproc.COLOR_RGB2HSV);
+            setRanges(firstRange,secondRange);
+            ByteArrayOutputStream imageBase64  = imageProcessingOperations.getBase64Image(fileUri,getReactApplicationContext(),firstLower,firstUpper,secondLower,secondUpper);
+            String imageLocation = imageProcessingOperations.getImageLocation(imageBase64);
+            WritableMap resultMap = imageProcessingOperations.createResultMap(imageLocation);
 
-            //Core.inRange(result,new Scalar(55,50,20),new Scalar(143,255,255),maskFinal);
-            Core.inRange(result,
-                    new Scalar(firstLower.getInt(0),firstLower.getInt(1),firstLower.getInt(2)),
-                    new Scalar(firstUpper.getInt(0),firstUpper.getInt(1),firstUpper.getInt(2)),
-                    firstMask);
+            promise.resolve(resultMap);
 
-            Core.inRange(result,
-                    new Scalar(secondLower.getInt(0),secondLower.getInt(1),secondLower.getInt(2)),
-                    new Scalar(secondUpper.getInt(0),secondUpper.getInt(1),secondUpper.getInt(2)),
-                    secondMask);
-
-            Core.add(firstMask,secondMask,finalMask);
-            int nonZeroGreen = Core.countNonZero(firstMask);
-            double percentageGreen = nonZeroGreen*100/(img.getHeight()*img.getWidth());
-
-            int nonZeroYellow = Core.countNonZero(secondMask);
-            double percentageYellow = nonZeroYellow*100/(img.getHeight()*img.getWidth());
-            //Conversion to Base64
-
-            Core.bitwise_and(mat,mat,result,finalMask);
-            Bitmap resultImg= img;
-            Utils.matToBitmap(result,resultImg);
-
-            ByteArrayOutputStream imgBase64 = new ByteArrayOutputStream();
-            resultImg.compress(Bitmap.CompressFormat.PNG,100,imgBase64);
-
-            byte[] array = imgBase64.toByteArray();
-
-            String str = Base64.encodeToString(array,Base64.DEFAULT);
-            WritableMap wm = Arguments.createMap();
-            wm.putString("img",str);
-            wm.putDouble("percentageGreen",percentageGreen);
-            wm.putDouble("percentageYellow",percentageYellow);
-            promise.resolve(wm);
-        } catch (IOException e) {
-            promise.reject("OpenCv","Cannot read processed image from memory");
+        } catch (Exception e) {
+            promise.reject("OpenCv","Error processing image in java module");
             e.printStackTrace();
         }
 
     }
 
-    private String getFilePath(Uri uri) {
+    private void setRanges(ReadableArray firstRange, ReadableArray secondRange) {
+        firstLower = firstRange.getArray(0);
+        firstUpper = firstRange.getArray(1);
+        secondLower = secondRange.getArray(0);
+        secondUpper = secondRange.getArray(1);
+    }
+
+    /*private ByteArrayOutputStream convertImage(String fileUri) throws IOException {
+        Bitmap img = Bitmap.createBitmap(MediaStore.Images.Media.getBitmap(getReactApplicationContext().getContentResolver(), Uri.parse(fileUri)));
+        Mat mat= new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC4);
+        Utils.bitmapToMat(img,mat);
+
+        Mat result = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+        Mat firstMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+        Mat secondMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+        Mat finalMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+        Imgproc.cvtColor(mat,result,Imgproc.COLOR_RGB2HSV);
+
+        Core.inRange(result,
+                new Scalar(firstLower.getInt(0),firstLower.getInt(1),firstLower.getInt(2)),
+                new Scalar(firstUpper.getInt(0),firstUpper.getInt(1),firstUpper.getInt(2)),
+                firstMask);
+
+        Core.inRange(result,
+                new Scalar(secondLower.getInt(0),secondLower.getInt(1),secondLower.getInt(2)),
+                new Scalar(secondUpper.getInt(0),secondUpper.getInt(1),secondUpper.getInt(2)),
+                secondMask);
+
+        Core.add(firstMask,secondMask,finalMask);
+        int nonZeroGreen = Core.countNonZero(firstMask);
+        percentageGreen = nonZeroGreen*100/(img.getHeight()*img.getWidth());
+
+        int nonZeroYellow = Core.countNonZero(secondMask);
+        percentageYellow = nonZeroYellow*100/(img.getHeight()*img.getWidth());
+
+        //Conversion to Base64
+        Core.bitwise_and(mat,mat,result,finalMask);
+        Bitmap resultImg= img;
+        Utils.matToBitmap(result,resultImg);
+
+        ByteArrayOutputStream imgBase64 = new ByteArrayOutputStream();
+        resultImg.compress(Bitmap.CompressFormat.PNG,100,imgBase64);
+
+        return imgBase64;
+
+
+
+    } */
+
+    /*private String getImageLocation(ByteArrayOutputStream imageBase64 ) {
+        byte[] array = imageBase64.toByteArray();
+        return Base64.encodeToString(array,Base64.DEFAULT);
+    } */
+
+    /*private WritableMap createResultMap(String imageLocation) {
+        WritableMap wm = Arguments.createMap();
+        wm.putString("img",imageLocation);
+        wm.putDouble("percentageGreen",percentageGreen);
+        wm.putDouble("percentageYellow",percentageYellow);
+        return wm;
+    }*/
+
+    /*private String getFilePath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
 
         Cursor cursor = getReactApplicationContext().getContentResolver().query(uri, projection, null, null, null);
@@ -120,7 +146,7 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             return picturePath;
         }
         return null;
-    }
+    } */
 
 
 }
