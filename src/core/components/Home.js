@@ -86,6 +86,7 @@ export class Home extends Component {
 
     this.props.navigation.navigate('Imagen', {
       image: img,
+      originalImage: uriImage,
       shouldRotate: shouldRotate,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
