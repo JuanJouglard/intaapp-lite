@@ -31,8 +31,9 @@ export class Percentages extends Component {
 
 const styles = StyleSheet.create({
   percentages: {
-    flex: 3,
+    flex: 5,
     width: '90%',
+    height: '30%',
     borderRadius: 25,
     backgroundColor: '#1f2f33',
     alignItems: 'center',
