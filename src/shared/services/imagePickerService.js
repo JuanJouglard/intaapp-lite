@@ -24,11 +24,15 @@ export class ImagePickerService {
     const result = new Promise((resolve, reject) => {
       ImagePicker.launchCamera(this.options, response => {
         if (response.didCancel) {
-          console.log('User cancelled image picker');
+          reject('User cancelled image picker');
         } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
+          reject('ImagePicker Error: ' + response.error);
         } else {
-          resolve(response.uri);
+          resolve({
+            uri: response.uri,
+            width: response.width,
+            height: response.height,
+          });
         }
       });
     });
@@ -42,11 +46,15 @@ export class ImagePickerService {
         //console.log('Response = ', response);
 
         if (response.didCancel) {
-          console.log('User cancelled image picker');
+          reject('User cancelled image picker');
         } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
+          reject('ImagePicker Error: ' + response.error);
         } else {
-          resolve(response.uri);
+          resolve({
+            uri: response.uri,
+            width: response.width,
+            height: response.height,
+          });
         }
       });
     });

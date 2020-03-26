@@ -37,15 +37,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f2f33',
     alignItems: 'center',
     padding: 25,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
+    elevation: 3,
     paddingTop: 0,
   },
   circlesContainer: {

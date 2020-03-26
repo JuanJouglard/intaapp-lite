@@ -42,7 +42,7 @@ export class Home extends Component {
               style={styles.card}
               header
               button
-              onPress={this.launchCamera}>
+              onPress={this.launch('Camera')}>
               <Icon
                 type="FontAwesome5"
                 name="camera-retro"
@@ -56,7 +56,7 @@ export class Home extends Component {
               style={styles.card}
               header
               button
-              onPress={this.launchGallery}>
+              onPress={this.launch('Gallery')}>
               <Icon name="upload" type="AntDesign" style={styles.icon} />
               <Text style={styles.descText}>
                 SELECCIONAR UNA FOTO DE LA GALERIA
@@ -68,28 +68,29 @@ export class Home extends Component {
     );
   }
 
-  launchCamera = async () => {
-    const uriImage = await this.picker.getImageFromCamera();
-    this.routeToImageView(uriImage);
+  launch = picker => async () => {
+    try {
+      const {uri, width, height} = await this.picker['getImageFrom' + picker]();
+      this.routeToImageView(uri, width < height);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  async routeToImageView(uriImage) {
+  async routeToImageView(uriImage, shouldRotate) {
     const {
       img,
       percentageGreen,
       percentageYellow,
     } = await this.imageProcessor.processImage(uriImage);
+
     this.props.navigation.navigate('Imagen', {
       image: img,
+      shouldRotate: shouldRotate,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
     });
   }
-
-  launchGallery = async () => {
-    const uriImage = await this.picker.getImageFromGallery();
-    this.routeToImageView(uriImage);
-  };
 }
 
 const styles = StyleSheet.create({

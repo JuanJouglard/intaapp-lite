@@ -8,11 +8,10 @@ export class ImageView extends Component {
 
   render() {
     return (
-      <View style={styles.imageContainer}>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
           <Image
-            resizeMode="contain"
-            style={styles.image}
+            style={this.rotation()}
             source={{
               uri: `data:image/png;base64,${this.props.route.params.image}`,
             }}
@@ -26,22 +25,31 @@ export class ImageView extends Component {
       </View>
     );
   }
+
+  rotation() {
+    if (this.props.route.params.shouldRotate) {
+      return {transform: [{rotate: '90deg'}], ...styles.image, height: '120%'};
+    } else {
+      return styles.image;
+    }
+  }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  imageContainer: {
     flex: 3,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
   },
-  imageContainer: {
+  container: {
     flex: 1,
     alignItems: 'center',
   },
   image: {
     width: '100%',
     height: '100%',
+    resizeMode: 'contain',
   },
   information: {
     flex: 2,

@@ -19,7 +19,17 @@ class App extends PureComponent {
             component={Home}
             options={{headerShown: false}}
           />
-          <Stack.Screen name="Imagen" component={ImageView} />
+          <Stack.Screen
+            name="Imagen"
+            component={ImageView}
+            options={{
+              headerStyle: {
+                elevation: 0,
+                backgroundColor: '#1f2f33',
+              },
+              headerTintColor: '#f5f7f7',
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
