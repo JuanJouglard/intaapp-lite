@@ -10,6 +10,7 @@ import {
   Title,
   View,
   Left,
+  Spinner,
 } from 'native-base';
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
@@ -24,6 +25,9 @@ export class Home extends Component {
     super(props);
     this.picker = ImagePickerService.getInstance();
     this.imageProcessor = ImageProcessor.getInstance();
+    this.state = {
+      loading: false,
+    };
   }
 
   render() {
@@ -37,38 +41,47 @@ export class Home extends Component {
           <Right />
         </Header>
         <Content contentContainerStyle={styles.container}>
-          <View style={styles.cardContainer}>
-            <CardItem
-              style={styles.card}
-              header
-              button
-              onPress={this.launch('Camera')}>
-              <Icon
-                type="FontAwesome5"
-                name="camera-retro"
-                style={styles.icon}
-              />
-              <Text style={styles.descText}>TOMAR UNA FOTO CON LA CAMARA</Text>
-            </CardItem>
-          </View>
-          <View style={styles.cardContainer}>
-            <CardItem
-              style={styles.card}
-              header
-              button
-              onPress={this.launch('Gallery')}>
-              <Icon name="upload" type="AntDesign" style={styles.icon} />
-              <Text style={styles.descText}>
-                SELECCIONAR UNA FOTO DE LA GALERIA
-              </Text>
-            </CardItem>
-          </View>
+          {this.state.loading ? (
+            <Spinner color="#1f2f33" />
+          ) : (
+            <>
+              <View style={styles.cardContainer}>
+                <CardItem
+                  style={styles.card}
+                  header
+                  button
+                  onPress={this.launch('Camera')}>
+                  <Icon
+                    type="FontAwesome5"
+                    name="camera-retro"
+                    style={styles.icon}
+                  />
+                  <Text style={styles.descText}>
+                    TOMAR UNA FOTO CON LA CAMARA
+                  </Text>
+                </CardItem>
+              </View>
+              <View style={styles.cardContainer}>
+                <CardItem
+                  style={styles.card}
+                  header
+                  button
+                  onPress={this.launch('Gallery')}>
+                  <Icon name="upload" type="AntDesign" style={styles.icon} />
+                  <Text style={styles.descText}>
+                    SELECCIONAR UNA FOTO DE LA GALERIA
+                  </Text>
+                </CardItem>
+              </View>
+            </>
+          )}
         </Content>
       </Container>
     );
   }
 
   launch = picker => async () => {
+    this.setState({loading: true});
     try {
       const {uri, width, height} = await this.picker['getImageFrom' + picker]();
       this.routeToImageView(uri, width < height);
@@ -83,6 +96,10 @@ export class Home extends Component {
       percentageGreen,
       percentageYellow,
     } = await this.imageProcessor.processImage(uriImage);
+
+    this.setState({
+      loading: false,
+    });
 
     this.props.navigation.navigate('Imagen', {
       image: img,
