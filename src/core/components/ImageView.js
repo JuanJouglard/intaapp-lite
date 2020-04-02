@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {Percentages} from './Percentages';
 import SwitchSelector from 'react-native-switch-selector';
+import {options} from '../../configuration/options';
+import {Percentages} from './Percentages';
 
 export class ImageView extends Component {
   constructor(props) {
@@ -19,19 +20,16 @@ export class ImageView extends Component {
             style={styles.switch}
             initial={0}
             onPress={this.changeImage}
-            textColor={'#4b8594'} //'#7a44cf'
+            textColor={'#4b8594'}
             selectedColor={'white'}
-            buttonColor={'#71aebe'}
+            buttonColor={'#4E7774'}
             fontSize={16}
             borderColor={'#000'}
-            options={[
-              {label: 'Mascara', value: false},
-              {label: 'Original', value: true},
-            ]}
+            options={options}
           />
         </View>
         <View style={styles.imageContainer}>
-          <Image style={this.rotation()} source={this.getImage()} />
+          <Image style={this.shouldRotate()} source={this.getImage()} />
         </View>
         <Percentages
           percentageGreen={this.props.route.params.percentageGreen}
@@ -50,13 +48,18 @@ export class ImageView extends Component {
     if (this.state.showOriginal) {
       return {uri: this.props.route.params.originalImage};
     } else {
-      return {uri: `data:image/png;base64,${this.props.route.params.image}`};
+      return {
+        uri: `data:image/png;base64,${this.props.route.params.image}`,
+      };
     }
   }
 
-  rotation() {
+  shouldRotate() {
     if (this.props.route.params.shouldRotate) {
-      return {transform: [{rotate: '90deg'}], ...styles.image};
+      return {
+        transform: [{rotate: '90deg'}],
+        ...styles.image,
+      };
     } else {
       return styles.image;
     }
