@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import {Text, Image, StyleSheet, View, Switch} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+import SwitchSelector from 'react-native-switch-selector';
+import {options} from '../../configuration/options';
 import {Percentages} from './Percentages';
+
 export class ImageView extends Component {
   constructor(props) {
     super(props);
@@ -13,17 +16,20 @@ export class ImageView extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.switchContainer}>
-          <Text style={styles.filterText}>Aplicar</Text>
-          <Switch
-            trackColor={{false: '#c6c8c9', true: 'rgba(31,47,51,0.5)'}}
-            thumbColor={this.state.showOriginal ? '#1f2f33' : '#fff'}
+          <SwitchSelector
             style={styles.switch}
-            onValueChange={this.changeImage}
-            value={this.state.showOriginal}
+            initial={0}
+            onPress={this.changeImage}
+            textColor={'#4b8594'}
+            selectedColor={'white'}
+            buttonColor={'#4E7774'}
+            fontSize={16}
+            borderColor={'#000'}
+            options={options}
           />
         </View>
         <View style={styles.imageContainer}>
-          <Image style={this.rotation()} source={this.getImage()} />
+          <Image style={this.shouldRotate()} source={this.getImage()} />
         </View>
         <Percentages
           percentageGreen={this.props.route.params.percentageGreen}
@@ -42,13 +48,18 @@ export class ImageView extends Component {
     if (this.state.showOriginal) {
       return {uri: this.props.route.params.originalImage};
     } else {
-      return {uri: `data:image/png;base64,${this.props.route.params.image}`};
+      return {
+        uri: `data:image/png;base64,${this.props.route.params.image}`,
+      };
     }
   }
 
-  rotation() {
+  shouldRotate() {
     if (this.props.route.params.shouldRotate) {
-      return {transform: [{rotate: '90deg'}], ...styles.image, height: '120%'};
+      return {
+        transform: [{rotate: '90deg'}],
+        ...styles.image,
+      };
     } else {
       return styles.image;
     }
@@ -57,38 +68,35 @@ export class ImageView extends Component {
 
 const styles = StyleSheet.create({
   imageContainer: {
-    flex: 5,
+    flex: 6,
     justifyContent: 'center',
     alignItems: 'center',
     width: '90%',
-
-    borderWidth: 4,
-    borderColor: 'black',
   },
   container: {
     flex: 1,
     alignItems: 'center',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: '95%',
+    height: '95%',
     resizeMode: 'contain',
   },
   filterText: {
     fontSize: 22,
+    fontWeight: 'bold',
   },
   information: {
-    flex: 2,
+    flex: 1,
   },
   switchContainer: {
-    width: '90%',
+    width: '100%',
     flex: 1,
-    borderWidth: 4,
-    borderColor: 'black',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   switch: {
-    transform: [{scaleX: 1.5}, {scaleY: 1.5}],
+    width: '80%',
+    zIndex: 99,
   },
 });
