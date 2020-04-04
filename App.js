@@ -19,7 +19,6 @@ class App extends PureComponent {
     this.setState({
       showRealApp: oldUser,
     });
-    AsyncStorage.clear(); //Toggle show tutorial only when the user enters for the first time
   }
 
   _onDone = () => {
