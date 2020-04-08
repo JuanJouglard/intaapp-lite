@@ -1,4 +1,4 @@
-import {ImageEditor} from '../../shared/ImageEditor';
+import {ImageEditor} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
 import React, {Component} from 'react';
 import {Image, TouchableOpacity, StyleSheet, View} from 'react-native';

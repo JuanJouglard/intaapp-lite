@@ -14,11 +14,9 @@ import {
 } from 'native-base';
 import React, {Component} from 'react';
 import {StyleSheet, Image, ImageBackground} from 'react-native';
-import {ImagePickerService} from '../../shared/services/imagePickerService';
-import {ImageProcessor} from '../../shared/services/imageProcessor';
+import {ImagePickerService, ImageProcessor, HomeCard} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
 import {slides} from '../../configuration/slides.js';
-import {HomeCard} from '../../shared/HomeCard';
 
 import {Tour} from '../../guided-tour/Tour';
 

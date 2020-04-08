@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-import {Percentage} from '../../shared/PercentageCircle';
+import {Percentage} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
 
 export class Percentages extends Component {
