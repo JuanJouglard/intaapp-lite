@@ -6,6 +6,7 @@ import {Button} from 'native-base';
 import Slider from '@react-native-community/slider';
 import {imageAdjusts} from '../../configuration/image-adjustment.js';
 import {ImageProcessor} from '../services/imageProcessor';
+import {Brightness} from 'react-native-color-matrix-image-filters';
 
 export class ImageEditor extends Component {
   imageProcessor;
@@ -14,35 +15,24 @@ export class ImageEditor extends Component {
     super(props);
     this.state = {
       image: this.props.image,
+      brightness: 1,
     };
 
     this.imageProcessor = ImageProcessor.getInstance();
   }
 
-  adjustImage = (sliderType) => {
-    return async (changedValue) => {
-      let image = await this.imageProcessor.adjustImage(
-        this.props.image,
-        sliderType,
-        changedValue,
-      );
-      this.setState({
-        image: image,
-      });
-    };
-  };
-
   render() {
-
     return (
       <Popover popoverStyle={styles.popover} isVisible={this.props.showOver}>
         <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: `data:image/png;base64,${this.state.image}`,
-            }}
-          />
+          <Brightness amount={this.state.brightness}>
+            <Image
+              style={styles.image}
+              source={{
+                uri: `data:image/png;base64,${this.state.image}`,
+              }}
+            />
+          </Brightness>
         </View>
         <View style={styles.settingsContainer}>
           {this.getAdjustmentSliders()}
@@ -71,7 +61,11 @@ export class ImageEditor extends Component {
             maximumValue={adjust.maximumValue}
             minimumTrackTintColor={mainThemeColor(1)}
             thumbTintColor={mainThemeColor(1)}
-            onValueChange={this.adjustImage(adjust.title)}
+            onValueChange={(value) =>
+              this.setState({
+                brightness: value,
+              })
+            }
           />
         </View>
       );

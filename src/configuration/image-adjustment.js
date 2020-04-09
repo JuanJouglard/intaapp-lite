@@ -2,7 +2,7 @@ export const imageAdjusts = [
   {
     key: 0,
     title: 'Brillo',
-    maximumValue: 100,
+    maximumValue: 2,
     minimumValue: 0,
     get defaultValue() {
       return (this.maximumValue + this.minimumValue) / 2;
