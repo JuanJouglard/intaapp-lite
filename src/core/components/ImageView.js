@@ -38,12 +38,13 @@ export class ImageView extends Component {
           <TouchableOpacity
             onPress={this.showEditor(true)}
             style={styles.adjustButton}>
-            <Icon name="edit" type="Entypo" style={styles.icon}></Icon>
+            <Icon name="edit" type="Entypo" style={styles.icon} />
           </TouchableOpacity>
           <ImageEditor
             image={this.props.route.params.originalImage}
             showOver={this.state.showEditor}
-            onClose={this.showEditor(false)}></ImageEditor>
+            onClose={this.showEditor(false)}
+          />
         </View>
         <Percentages
           percentageGreen={this.props.route.params.percentageGreen}
@@ -54,13 +55,15 @@ export class ImageView extends Component {
     );
   }
 
-  changeImage = (value) => {
+  changeImage = value => {
     this.setState({showOriginal: value});
   };
 
   getImage() {
     if (this.state.showOriginal) {
-      return {uri: this.props.route.params.originalImage};
+      return {
+        uri: `data:image/png;base64,${this.props.route.params.originalImage}`,
+      };
     } else {
       return {
         uri: `data:image/png;base64,${this.props.route.params.image}`,
@@ -79,7 +82,7 @@ export class ImageView extends Component {
     }
   }
 
-  showEditor = (show) => () => {
+  showEditor = show => () => {
     this.setState({
       showEditor: show,
     });

@@ -18,4 +18,12 @@ export class ImageProcessor {
       colorsRange.yellowRange,
     );
   }
+
+  async adjustImage(imageBase64, sliderType, changedValue) {
+    return NativeModules.NativeOpenCV.adjustImage(
+      imageBase64,
+      sliderType,
+      changedValue,
+    );
+  }
 }

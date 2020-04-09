@@ -5,8 +5,15 @@ import Popover from 'react-native-popover-view';
 import {Button} from 'native-base';
 import Slider from '@react-native-community/slider';
 import {imageAdjusts} from '../../configuration/image-adjustment.js';
+import {imageProcessor} from '../services/imageProcessor';
 
 export class ImageEditor extends Component {
+  adjustImage = sliderType => {
+    return changedValue => {
+      imageProcessor.adjustImage(sliderType, changedValue);
+    };
+  };
+
   render() {
     console.log(this.props.image);
 
@@ -17,7 +24,8 @@ export class ImageEditor extends Component {
             style={styles.image}
             source={{
               uri: this.props.image,
-            }}></Image>
+            }}
+          />
         </View>
         <View style={styles.settingsContainer}>
           {this.getAdjustmentSliders()}
@@ -35,7 +43,7 @@ export class ImageEditor extends Component {
   }
 
   getAdjustmentSliders() {
-    return imageAdjusts.map((adjust) => {
+    return imageAdjusts.map(adjust => {
       return (
         <View key={adjust.key} style={styles.sliderContainer}>
           <Text>{adjust.title}</Text>
@@ -46,6 +54,7 @@ export class ImageEditor extends Component {
             maximumValue={adjust.maximumValue}
             minimumTrackTintColor={mainThemeColor(1)}
             thumbTintColor={mainThemeColor(1)}
+            onValueChange={this.adjustImage(adjust.title)}
           />
         </View>
       );

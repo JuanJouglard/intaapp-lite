@@ -76,17 +76,19 @@ export class Home extends Component {
     );
   }
 
-  launch = (picker) => async () => {
+  launch = picker => async () => {
     this.setState({loading: true});
     try {
-      const {uri, width, height} = await this.picker['getImageFrom' + picker]();
-      this.routeToImageView(uri, width < height);
+      const {uri, data, width, height} = await this.picker[
+        'getImageFrom' + picker
+      ]();
+      this.routeToImageView(uri, data, width < height);
     } catch (error) {
       console.log(error);
     }
   };
 
-  async routeToImageView(uriImage, shouldRotate) {
+  async routeToImageView(uriImage, dataImage, shouldRotate) {
     const {
       img,
       percentageGreen,
@@ -99,7 +101,8 @@ export class Home extends Component {
 
     this.props.navigation.navigate('Imagen', {
       image: img,
-      originalImage: uriImage,
+      // originalImage: uriImage,
+      originalImage: dataImage,
       shouldRotate: shouldRotate,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
