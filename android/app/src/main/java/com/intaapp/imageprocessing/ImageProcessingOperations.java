@@ -83,7 +83,7 @@ public class ImageProcessingOperations {
         return nonZero*100/(img.getHeight()*img.getWidth());
     }
 
-    private ByteArrayOutputStream convertToBase64(Bitmap img) {
+    public ByteArrayOutputStream convertToBase64(Bitmap img) {
         Core.bitwise_and(mat,mat,result,finalMask);
         Utils.matToBitmap(result, img);
 

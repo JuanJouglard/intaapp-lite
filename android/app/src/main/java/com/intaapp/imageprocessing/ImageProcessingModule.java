@@ -71,9 +71,18 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public  void adjustImage(String imageBase64, String sliderType, int changedValue) {
+    public  void adjustImage(String imageBase64, String sliderType, int changedValue,Promise promise) {
         Log.i("ADJUSTIMG BRILLO", sliderType);
-
+        byte[] imgbytes = Base64.decode(imageBase64, Base64.DEFAULT);
+        Mat image = Imgcodecs.imdecode(new MatOfByte(imgbytes), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
+        Mat convertedImage = new Mat();
+        image.convertTo(convertedImage, -1,1,changedValue);
+        Bitmap bmp = Bitmap.createBitmap(image.width(),image.height(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(convertedImage,bmp);
+        ByteArrayOutputStream imgBase64 = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG,100,imgBase64);
+        String img = Base64.encodeToString(imgBase64.toByteArray(), Base64.DEFAULT);
+        promise.resolve(img);
     }
 
     private void setRanges(ReadableArray firstRange, ReadableArray secondRange) {

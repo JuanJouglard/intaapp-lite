@@ -11,21 +11,28 @@ export class ImageEditor extends Component {
   imageProcessor;
 
   constructor(props) {
+    super(props);
+    this.state = {
+      image: this.props.image,
+    };
+
     this.imageProcessor = ImageProcessor.getInstance();
   }
 
-  adjustImage = sliderType => {
-    return changedValue => {
-      this.imageProcessor.adjustImage(
+  adjustImage = (sliderType) => {
+    return async (changedValue) => {
+      let image = await this.imageProcessor.adjustImage(
         this.props.image,
         sliderType,
         changedValue,
       );
+      this.setState({
+        image: image,
+      });
     };
   };
 
   render() {
-    console.log(this.props.image);
 
     return (
       <Popover popoverStyle={styles.popover} isVisible={this.props.showOver}>
@@ -33,7 +40,7 @@ export class ImageEditor extends Component {
           <Image
             style={styles.image}
             source={{
-              uri: this.props.image,
+              uri: `data:image/png;base64,${this.state.image}`,
             }}
           />
         </View>
@@ -53,7 +60,7 @@ export class ImageEditor extends Component {
   }
 
   getAdjustmentSliders() {
-    return imageAdjusts.map(adjust => {
+    return imageAdjusts.map((adjust) => {
       return (
         <View key={adjust.key} style={styles.sliderContainer}>
           <Text>{adjust.title}</Text>
