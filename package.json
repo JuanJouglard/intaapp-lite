@@ -13,6 +13,7 @@
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/async-storage": "^1.9.0",
     "@react-native-community/masked-view": "^0.1.7",
+    "@react-native-community/slider": "^2.0.9",
     "@react-navigation/native": "^5.1.1",
     "@react-navigation/stack": "^5.2.3",
     "native-base": "^2.13.12",
