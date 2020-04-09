@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.intaapp.imageprocessing.ImageProcessingOperations;
 
@@ -66,6 +67,12 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             promise.reject("OpenCv","Error processing image in java module");
             e.printStackTrace();
         }
+
+    }
+
+    @ReactMethod
+    public  void adjustImage(String imageBase64, String sliderType, int changedValue) {
+        Log.i("ADJUSTIMG BRILLO", sliderType);
 
     }
 

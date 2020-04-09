@@ -5,12 +5,22 @@ import Popover from 'react-native-popover-view';
 import {Button} from 'native-base';
 import Slider from '@react-native-community/slider';
 import {imageAdjusts} from '../../configuration/image-adjustment.js';
-import {imageProcessor} from '../services/imageProcessor';
+import {ImageProcessor} from '../services/imageProcessor';
 
 export class ImageEditor extends Component {
+  imageProcessor;
+
+  constructor(props) {
+    this.imageProcessor = ImageProcessor.getInstance();
+  }
+
   adjustImage = sliderType => {
     return changedValue => {
-      imageProcessor.adjustImage(sliderType, changedValue);
+      this.imageProcessor.adjustImage(
+        this.props.image,
+        sliderType,
+        changedValue,
+      );
     };
   };
 
