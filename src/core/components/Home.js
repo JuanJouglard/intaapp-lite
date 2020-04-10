@@ -16,6 +16,7 @@ import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import {ImagePickerService} from '../../shared/services/imagePickerService';
 import {ImageProcessor} from '../../shared/services/imageProcessor';
+import {mainThemeColor} from '../../configuration/colors';
 
 export class Home extends Component {
   picker;
@@ -33,7 +34,10 @@ export class Home extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: '#1f2f33'}}>
+        <Header
+          style={{
+            backgroundColor: mainThemeColor(1),
+          }}>
           <Left />
           <Body>
             <Title>INTA</Title>
@@ -42,7 +46,7 @@ export class Home extends Component {
         </Header>
         <Content contentContainerStyle={styles.container}>
           {this.state.loading ? (
-            <Spinner color="#1f2f33" />
+            <Spinner color={mainThemeColor(1)} />
           ) : (
             <>
               <View style={styles.cardContainer}>
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     borderRadius: 15,
-    backgroundColor: 'rgba(31, 47, 51, 0.3)',
+    backgroundColor: mainThemeColor(0.3),
   },
   cardContainer: {
     flex: 1,

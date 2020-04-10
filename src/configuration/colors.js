@@ -15,3 +15,7 @@ const upperRed2 = [179];
 
 //export const redRange1 = [lowerRed1,upperRed1];
 //export const redRange2 = [lowerRed2,upperRed2];
+
+export const mainThemeColor = opacity => `rgba(31, 47, 51, ${opacity})`;
+
+export const accentThemeColor = opacity => `rgba(31, 47, 51, ${opacity})`;
