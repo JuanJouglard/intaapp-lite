@@ -1,5 +1,9 @@
 package com.intaapp.nativecomponents.image;
 
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.util.Log;
 import android.view.ViewManager;
 
@@ -21,10 +25,15 @@ import java.util.List;
 public class ReactImageManager extends SimpleViewManager<ReactImageView> {
 
     ReactApplicationContext mCallerContext;
-
+    ColorMatrix currentBright;
+    ColorMatrix currentSat;
+    ColorMatrix currentContrast;
 
     public ReactImageManager(ReactApplicationContext context) {
         mCallerContext = context;
+        currentBright = new ColorMatrix();
+        currentSat = new ColorMatrix();
+        currentContrast = new ColorMatrix();
     }
 
     @NonNull
@@ -46,19 +55,38 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
     }
 
     @ReactProp(name = "brightness")
-    public void setBrightness(ReactImageView view, @Nullable int brightness) {
-        //view.setSource(sources);
-        Log.i("Brillo", brightness+"");
+    public void setBrightness(ReactImageView view, @Nullable float brightness) {
+        currentBright.reset();
+        currentBright.set(new float[] {
+                1, 0, 0, 0, brightness,
+                0, 1, 0, 0, brightness,
+                0, 0, 1, 0, brightness,
+                0, 0, 0, 1, 0 });
+        currentBright.postConcat(currentSat);
+        currentBright.postConcat(currentContrast);
+        view.setColorFilter(new ColorMatrixColorFilter(currentBright));
     }
 
     @ReactProp(name = "saturation")
-    public void setSaturation(ReactImageView view, @Nullable int saturation) {
-       // view.setSource(sources);
+    public void setSaturation(ReactImageView view, @Nullable float saturation) {
+        //currentSat.reset();
+        currentSat.setSaturation(saturation);
+        currentSat.postConcat(currentBright);
+        currentSat.postConcat(currentContrast);
+        view.setColorFilter(new ColorMatrixColorFilter(currentSat));
     }
 
     @ReactProp(name = "contrast")
-    public void setContrast(ReactImageView view, @Nullable int contrast) {
-        //view.setSource(sources);
+    public void setContrast(ReactImageView view, @Nullable float contrast) {
+        currentContrast.reset();
+        currentContrast.set(new float[] {
+                contrast, 0, 0, 0, 0,
+                0, contrast, 0, 0, 0,
+                0, 0, contrast, 0, 0,
+                0, 0, 0, contrast, 0 });
+        currentContrast.postConcat(currentBright);
+        currentContrast.postConcat(currentSat);
+        view.setColorFilter(new ColorMatrixColorFilter(currentContrast));
     }
 
     @ReactProp(name = ViewProps.RESIZE_MODE)

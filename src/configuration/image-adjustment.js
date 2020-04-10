@@ -3,8 +3,8 @@ export const imageAdjusts = [
     key: 0,
     title: 'Brillo',
     type: 'brightness',
-    maximumValue: 100,
-    minimumValue: 0,
+    maximumValue: 255,
+    minimumValue: -255,
     get defaultValue() {
       return (this.maximumValue + this.minimumValue) / 2;
     },
@@ -13,7 +13,7 @@ export const imageAdjusts = [
     key: 1,
     title: 'Saturacion',
     type: 'saturation',
-    maximumValue: 1,
+    maximumValue: 2,
     minimumValue: 0,
     get defaultValue() {
       return (this.maximumValue + this.minimumValue) / 2;

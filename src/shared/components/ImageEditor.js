@@ -12,9 +12,9 @@ export class ImageEditor extends Component {
     super(props);
     this.state = {
       image: this.props.image,
-      brightness: 1,
-      saturation: 1,
-      contrast: 1,
+      brightness: imageAdjusts[0].defaultValue,
+      saturation: imageAdjusts[1].defaultValue,
+      contrast: imageAdjusts[2].defaultValue
     };
   }
 
@@ -32,7 +32,6 @@ export class ImageEditor extends Component {
               },
             ]}
             brightness={this.state.brightness}
-            saturation={this.state.saturation}
             contrast={this.state.contrast}
           />
         </View>
