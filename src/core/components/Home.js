@@ -87,6 +87,7 @@ export class Home extends Component {
       this.routeToImageView(uri, width < height);
     } catch (error) {
       console.log(error);
+      this.setState({loading: false});
     }
   };
 
