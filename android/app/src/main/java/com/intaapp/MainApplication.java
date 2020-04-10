@@ -3,13 +3,16 @@ package com.intaapp;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.view.ViewManager;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.soloader.SoLoader;
 import com.intaapp.imageprocessing.ImageProcessingPackage;
+import com.intaapp.nativecomponents.image.CustomImagePackage;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -48,8 +51,11 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           packages.add(new ImageProcessingPackage());
+          packages.add(new CustomImagePackage());
           return packages;
         }
+
+
 
         @Override
         protected String getJSMainModuleName() {
@@ -106,4 +112,5 @@ public class MainApplication extends Application implements ReactApplication {
       }
     }
   }
+
 }

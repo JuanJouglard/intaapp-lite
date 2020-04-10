@@ -5,34 +5,36 @@ import Popover from 'react-native-popover-view';
 import {Button} from 'native-base';
 import Slider from '@react-native-community/slider';
 import {imageAdjusts} from '../../configuration/image-adjustment.js';
-import {ImageProcessor} from '../services/imageProcessor';
-import {Brightness} from 'react-native-color-matrix-image-filters';
+import CustomImage from './CustomNativeImage';
 
 export class ImageEditor extends Component {
-  imageProcessor;
-
   constructor(props) {
     super(props);
     this.state = {
       image: this.props.image,
       brightness: 1,
+      saturation: 1,
+      contrast: 1,
     };
-
-    this.imageProcessor = ImageProcessor.getInstance();
   }
 
   render() {
+
     return (
       <Popover popoverStyle={styles.popover} isVisible={this.props.showOver}>
         <View style={styles.imageContainer}>
-          <Brightness amount={this.state.brightness}>
-            <Image
-              style={styles.image}
-              source={{
+          <CustomImage
+            resizeMode="contain"
+            style={styles.image}
+            src={[
+              {
                 uri: `data:image/png;base64,${this.state.image}`,
-              }}
-            />
-          </Brightness>
+              },
+            ]}
+            brightness={this.state.brightness}
+            saturation={this.state.saturation}
+            contrast={this.state.contrast}
+          />
         </View>
         <View style={styles.settingsContainer}>
           {this.getAdjustmentSliders()}
@@ -61,16 +63,18 @@ export class ImageEditor extends Component {
             maximumValue={adjust.maximumValue}
             minimumTrackTintColor={mainThemeColor(1)}
             thumbTintColor={mainThemeColor(1)}
-            onValueChange={(value) =>
-              this.setState({
-                brightness: value,
-              })
-            }
+            onValueChange={this.updateValue(adjust.type)}
           />
         </View>
       );
     });
   }
+
+  updateValue = (type) => (value) => {
+    this.setState({
+      [type]: value,
+    });
+  };
 }
 
 const styles = StyleSheet.create({
