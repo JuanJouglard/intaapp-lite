@@ -25,15 +25,15 @@ import java.util.List;
 public class ReactImageManager extends SimpleViewManager<ReactImageView> {
 
     ReactApplicationContext mCallerContext;
-    ColorMatrix currentBright;
-    ColorMatrix currentSat;
-    ColorMatrix currentContrast;
+    float currentBright;
+    float currentSat;
+    float currentContrast;
 
     public ReactImageManager(ReactApplicationContext context) {
         mCallerContext = context;
-        currentBright = new ColorMatrix();
-        currentSat = new ColorMatrix();
-        currentContrast = new ColorMatrix();
+        currentBright = 0;
+        currentContrast = 1;
+        currentSat = 1;
     }
 
     @NonNull
@@ -50,43 +50,25 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
 
     @ReactProp(name = "src")
     public void setSrc(ReactImageView view, @Nullable ReadableArray sources) {
-        Log.d("ReadableA",sources.toString());
         view.setSource(sources);
     }
 
     @ReactProp(name = "brightness")
     public void setBrightness(ReactImageView view, @Nullable float brightness) {
-        currentBright.reset();
-        currentBright.set(new float[] {
-                1, 0, 0, 0, brightness,
-                0, 1, 0, 0, brightness,
-                0, 0, 1, 0, brightness,
-                0, 0, 0, 1, 0 });
-        currentBright.postConcat(currentSat);
-        currentBright.postConcat(currentContrast);
-        view.setColorFilter(new ColorMatrixColorFilter(currentBright));
+        currentBright = brightness;
+        view.setColorFilter(applyFilter(brightness,currentContrast,currentSat));
     }
 
     @ReactProp(name = "saturation")
     public void setSaturation(ReactImageView view, @Nullable float saturation) {
-        //currentSat.reset();
-        currentSat.setSaturation(saturation);
-        currentSat.postConcat(currentBright);
-        currentSat.postConcat(currentContrast);
-        view.setColorFilter(new ColorMatrixColorFilter(currentSat));
+        currentSat = saturation;
+        view.setColorFilter(applyFilter(currentBright,currentContrast,saturation));
     }
 
     @ReactProp(name = "contrast")
     public void setContrast(ReactImageView view, @Nullable float contrast) {
-        currentContrast.reset();
-        currentContrast.set(new float[] {
-                contrast, 0, 0, 0, 0,
-                0, contrast, 0, 0, 0,
-                0, 0, contrast, 0, 0,
-                0, 0, 0, contrast, 0 });
-        currentContrast.postConcat(currentBright);
-        currentContrast.postConcat(currentSat);
-        view.setColorFilter(new ColorMatrixColorFilter(currentContrast));
+        currentContrast = contrast;
+        view.setColorFilter(applyFilter(currentBright, contrast, currentSat));
     }
 
     @ReactProp(name = ViewProps.RESIZE_MODE)
@@ -94,5 +76,24 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
         view.setScaleType(ImageResizeMode.toScaleType(resizeMode));
     }
 
+    @ReactProp(name = "saveImage")
+    public void saveImage(ReactImageView view, @Nullable boolean save) {
+        Log.i("SAVEIMG", save+"");
+    }
+
+    private ColorMatrixColorFilter applyFilter(float brightness,float contrast,float saturation) {
+        ColorMatrix satMatrix = new ColorMatrix();
+        satMatrix.setSaturation(saturation);
+        float[] satValues = satMatrix.getArray();
+
+        ColorMatrix cm = new ColorMatrix();
+        cm.set(new float[] {
+                satValues[0]*contrast, satValues[1]*contrast, satValues[2]*contrast, satValues[3]*contrast,satValues[4]*contrast + brightness,
+                satValues[5]*contrast, satValues[6]*contrast, satValues[7]*contrast, satValues[8]*contrast,satValues[9]*contrast + brightness,
+                satValues[10]*contrast, satValues[11]*contrast, satValues[12]*contrast, satValues[13]*contrast,satValues[14]*contrast + brightness,
+                satValues[15], satValues[16], satValues[17], satValues[18], satValues[19] });
+
+        return new ColorMatrixColorFilter(cm);
+    }
 
 }

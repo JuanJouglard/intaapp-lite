@@ -14,16 +14,20 @@ export class ImageEditor extends Component {
       image: this.props.image,
       brightness: imageAdjusts[0].defaultValue,
       saturation: imageAdjusts[1].defaultValue,
-      contrast: imageAdjusts[2].defaultValue
+      contrast: imageAdjusts[2].defaultValue,
+      saveImg: false,
     };
   }
 
   render() {
-
     return (
-      <Popover popoverStyle={styles.popover} isVisible={this.props.showOver}>
+      <Popover
+        onCloseComplete={this.resetState}
+        popoverStyle={styles.popover}
+        isVisible={this.props.showOver}>
         <View style={styles.imageContainer}>
           <CustomImage
+            saveImage={this.state.saveImg}
             resizeMode="contain"
             style={styles.image}
             src={[
@@ -32,6 +36,7 @@ export class ImageEditor extends Component {
               },
             ]}
             brightness={this.state.brightness}
+            saturation={this.state.saturation}
             contrast={this.state.contrast}
           />
         </View>
@@ -42,13 +47,26 @@ export class ImageEditor extends Component {
           <Button style={styles.button} onPress={this.props.onClose} light>
             <Text style={styles.buttonText}>Cancelar</Text>
           </Button>
-          <Button style={styles.button} onPress={this.props.onClose} primary>
+          <Button style={styles.button} onPress={this.saveImg} primary>
             <Text style={styles.buttonText}>Confirmar</Text>
           </Button>
         </View>
       </Popover>
     );
   }
+
+  saveImg = () => {
+    this.setState({
+      saveImg: true,
+    });
+    this.props.onClose();
+  };
+
+  resetState = () => {
+    this.setState({
+      saveImg: false,
+    });
+  };
 
   getAdjustmentSliders() {
     return imageAdjusts.map((adjust) => {
