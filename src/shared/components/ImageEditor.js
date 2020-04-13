@@ -27,6 +27,7 @@ export class ImageEditor extends Component {
         isVisible={this.props.showOver}>
         <View style={styles.imageContainer}>
           <CustomImage
+            onSave={this.save}
             saveImage={this.state.saveImg}
             resizeMode="contain"
             style={styles.image}
@@ -60,6 +61,10 @@ export class ImageEditor extends Component {
       saveImg: true,
     });
     this.props.onClose();
+  };
+
+  save = (event) => {
+    console.log('onSave', event.nativeEvent.uri);
   };
 
   resetState = () => {

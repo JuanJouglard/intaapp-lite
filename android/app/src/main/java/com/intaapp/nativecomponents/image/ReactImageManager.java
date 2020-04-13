@@ -8,6 +8,10 @@ import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ViewManager;
 
@@ -15,13 +19,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.RootDrawable;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.image.ImageResizeMode;
 import com.facebook.react.views.image.ReactImageView;
 import com.intaapp.utilities.ImageSaver;
@@ -33,13 +42,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class ReactImageManager extends SimpleViewManager<ReactImageView> {
+public class ReactImageManager extends SimpleViewManager<CustomImage> {
 
     ReactApplicationContext mCallerContext;
     float currentBright;
     float currentSat;
     float currentContrast;
     ImageSaver imgSaver;
+    CustomImage view;
+
 
     public ReactImageManager(ReactApplicationContext context) {
         mCallerContext = context;
@@ -57,8 +68,19 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
 
     @NonNull
     @Override
-    protected ReactImageView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new ReactImageView(reactContext, Fresco.newDraweeControllerBuilder(), null, mCallerContext);
+    protected CustomImage createViewInstance(@NonNull ThemedReactContext reactContext) {
+        return new CustomImage(reactContext, Fresco.newDraweeControllerBuilder(), null, mCallerContext);
+    }
+
+    @Override
+    public Map getExportedCustomBubblingEventTypeConstants() {
+        return MapBuilder.builder()
+                .put(
+                        "onSave",
+                        MapBuilder.of(
+                                "phasedRegistrationNames",
+                                MapBuilder.of("bubbled", "onSave")))
+                .build();
     }
 
     @ReactProp(name = "src")
@@ -90,15 +112,19 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
     }
 
     @ReactProp(name = "saveImage")
-    public void saveImage(ReactImageView view, @Nullable boolean save) {
+    public void saveImage(CustomImage view, @Nullable boolean save) {
         Log.i("SAVEIMG", save+"");
         if (save) {
-            Bitmap bmp = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bmp);
-            view.draw(canvas);
-            imgSaver.setFileName("modified.png").setDirectoryName("intaApp").save(bmp);
-            Bitmap bit = imgSaver.setFileName("modified.png").setDirectoryName("intaApp").load();
-            Log.i("BITMAPON", bit.toString());
+            view.getDrawable();
+            Bitmap bmp = imgSaver.createBitmapFromView(view, 720,1280);
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(new File(Environment.getExternalStorageDirectory().toString()+"/Pictures/IntaApp/test.png"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            bmp.compress(Bitmap.CompressFormat.PNG,100,fos);
+            view.triggerOnSaveEvent("test");
         }
     }
 
@@ -117,5 +143,7 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
 
         return new ColorMatrixColorFilter(cm);
     }
+
+
 
 }
