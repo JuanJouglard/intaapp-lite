@@ -32,7 +32,9 @@ export class ImageEditor extends Component {
             resizeMode="contain"
             style={styles.image}
             src={{
-              uri: this.props.image.getSource(),
+              source: [{
+                uri: this.props.image.getSource(),
+              }],
               width: this.props.image.getWidth(),
               height: this.props.image.getHeight(),
             }}
@@ -63,7 +65,7 @@ export class ImageEditor extends Component {
     this.props.onClose();
   };
 
-  save = event => {
+  save = (event) => {
     console.log('onSave', event.nativeEvent.uri);
   };
 
@@ -74,7 +76,7 @@ export class ImageEditor extends Component {
   };
 
   getAdjustmentSliders() {
-    return imageAdjusts.map(adjust => {
+    return imageAdjusts.map((adjust) => {
       return (
         <View key={adjust.key} style={styles.sliderContainer}>
           <Text>{adjust.title}</Text>
@@ -92,7 +94,7 @@ export class ImageEditor extends Component {
     });
   }
 
-  updateValue = type => value => {
+  updateValue = (type) => (value) => {
     this.setState({
       [type]: value,
     });

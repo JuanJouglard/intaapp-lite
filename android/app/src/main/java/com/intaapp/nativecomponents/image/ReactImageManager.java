@@ -65,9 +65,7 @@ public class ReactImageManager extends SimpleViewManager<CustomImageView> {
 
     @ReactProp(name = "src")
     public void setSrc(CustomImageView view, @Nullable ReadableMap image) {
-        WritableArray arr = Arguments.createArray();
-        arr.pushString(image.getString("uri"));
-        Image img = new Image(image.getInt("height"),image.getInt("width"),arr);
+        Image img = new Image(image.getInt("height"),image.getInt("width"),image.getArray("source"));
         view.setImageSource(img);
         Log.i("OBJECT", image.toString());
     }

@@ -7,9 +7,9 @@ public class Image {
 
     int height;
     int width;
-    WritableArray sources;
+    ReadableArray sources;
 
-    public Image(int height, int width, WritableArray sources) {
+    public Image(int height, int width, ReadableArray sources) {
         this.height = height;
         this.width = width;
         this.sources = sources;
@@ -23,7 +23,7 @@ public class Image {
         return width;
     }
 
-    public WritableArray getSource() {
+    public ReadableArray getSource() {
         return sources;
     }
 
