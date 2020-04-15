@@ -1,55 +1,36 @@
 package com.intaapp.nativecomponents.image;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.ViewManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.generic.RootDrawable;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.image.ImageResizeMode;
-import com.facebook.react.views.image.ReactImageView;
-import com.intaapp.utilities.ImageSaver;
+import com.intaapp.utilities.ImagesUtilities;
+import com.intaapp.utilities.models.Image;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class ReactImageManager extends SimpleViewManager<CustomImage> {
+public class ReactImageManager extends SimpleViewManager<CustomImageView> {
 
     ReactApplicationContext mCallerContext;
     float currentBright;
     float currentSat;
     float currentContrast;
-    ImageSaver imgSaver;
-    CustomImage view;
+    ImagesUtilities imgSaver;
+    CustomImageView view;
 
 
     public ReactImageManager(ReactApplicationContext context) {
@@ -57,7 +38,6 @@ public class ReactImageManager extends SimpleViewManager<CustomImage> {
         currentBright = 0;
         currentContrast = 1;
         currentSat = 1;
-        imgSaver = new ImageSaver(context);
     }
 
     @NonNull
@@ -68,8 +48,8 @@ public class ReactImageManager extends SimpleViewManager<CustomImage> {
 
     @NonNull
     @Override
-    protected CustomImage createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new CustomImage(reactContext, Fresco.newDraweeControllerBuilder(), null, mCallerContext);
+    protected CustomImageView createViewInstance(@NonNull ThemedReactContext reactContext) {
+        return new CustomImageView(reactContext, Fresco.newDraweeControllerBuilder(), null, mCallerContext);
     }
 
     @Override
@@ -84,66 +64,44 @@ public class ReactImageManager extends SimpleViewManager<CustomImage> {
     }
 
     @ReactProp(name = "src")
-    public void setSrc(ReactImageView view, @Nullable ReadableArray sources) {
-        view.setSource(sources);
+    public void setSrc(CustomImageView view, @Nullable ReadableMap image) {
+        WritableArray arr = Arguments.createArray();
+        arr.pushString(image.getString("uri"));
+        Image img = new Image(image.getInt("height"),image.getInt("width"),arr);
+        view.setImageSource(img);
+        Log.i("OBJECT", image.toString());
     }
 
     @ReactProp(name = "brightness")
-    public void setBrightness(ReactImageView view, @Nullable float brightness) {
+    public void setBrightness(CustomImageView view, @Nullable float brightness) {
         currentBright = brightness;
-        view.setColorFilter(applyFilter(brightness,currentContrast,currentSat));
+        view.applyFilter(brightness,currentContrast,currentSat);
     }
 
     @ReactProp(name = "saturation")
-    public void setSaturation(ReactImageView view, @Nullable float saturation) {
+    public void setSaturation(CustomImageView view, @Nullable float saturation) {
         currentSat = saturation;
-        view.setColorFilter(applyFilter(currentBright,currentContrast,saturation));
+        view.applyFilter(currentBright,currentContrast,saturation);
     }
 
     @ReactProp(name = "contrast")
-    public void setContrast(ReactImageView view, @Nullable float contrast) {
+    public void setContrast(CustomImageView view, @Nullable float contrast) {
         currentContrast = contrast;
-        view.setColorFilter(applyFilter(currentBright, contrast, currentSat));
+        view.applyFilter(currentBright, contrast, currentSat);
     }
 
     @ReactProp(name = ViewProps.RESIZE_MODE)
-    public void setResizeMode(ReactImageView view, @Nullable String resizeMode) {
+    public void setResizeMode(CustomImageView view, @Nullable String resizeMode) {
         view.setScaleType(ImageResizeMode.toScaleType(resizeMode));
     }
 
     @ReactProp(name = "saveImage")
-    public void saveImage(CustomImage view, @Nullable boolean save) {
+    public void saveImage(CustomImageView view, @Nullable boolean save) {
         Log.i("SAVEIMG", save+"");
         if (save) {
-            view.getDrawable();
-            Bitmap bmp = imgSaver.createBitmapFromView(view, 720,1280);
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(new File(Environment.getExternalStorageDirectory().toString()+"/Pictures/IntaApp/test.png"));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            bmp.compress(Bitmap.CompressFormat.PNG,100,fos);
-            view.triggerOnSaveEvent("test");
+            view.saveImageToStorage();
         }
     }
-
-
-    private ColorMatrixColorFilter applyFilter(float brightness,float contrast,float saturation) {
-        ColorMatrix satMatrix = new ColorMatrix();
-        satMatrix.setSaturation(saturation);
-        float[] satValues = satMatrix.getArray();
-
-        ColorMatrix cm = new ColorMatrix();
-        cm.set(new float[] {
-                satValues[0]*contrast, satValues[1]*contrast, satValues[2]*contrast, satValues[3]*contrast,satValues[4]*contrast + brightness,
-                satValues[5]*contrast, satValues[6]*contrast, satValues[7]*contrast, satValues[8]*contrast,satValues[9]*contrast + brightness,
-                satValues[10]*contrast, satValues[11]*contrast, satValues[12]*contrast, satValues[13]*contrast,satValues[14]*contrast + brightness,
-                satValues[15], satValues[16], satValues[17], satValues[18], satValues[19] });
-
-        return new ColorMatrixColorFilter(cm);
-    }
-
 
 
 }
