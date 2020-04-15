@@ -62,11 +62,11 @@ export class ImageView extends Component {
   getImage() {
     if (this.state.showOriginal) {
       return {
-        uri: `data:image/png;base64,${this.props.route.params.originalImage}`,
+        uri: this.props.route.params.originalImage.getSource(),
       };
     } else {
       return {
-        uri: `data:image/png;base64,${this.props.route.params.image}`,
+        uri: this.props.route.params.processedImage.getSource(),
       };
     }
   }

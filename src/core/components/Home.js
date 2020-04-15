@@ -17,6 +17,7 @@ import {StyleSheet, Image, ImageBackground} from 'react-native';
 import {ImagePickerService, ImageProcessor, HomeCard} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
 import {slides} from '../../configuration/slides.js';
+import {ImageModel} from '../../shared/models/ImageModel.js';
 
 import {Tour} from '../../guided-tour/Tour';
 
@@ -82,28 +83,32 @@ export class Home extends Component {
       const {uri, data, width, height} = await this.picker[
         'getImageFrom' + picker
       ]();
-      this.routeToImageView(uri, data, width < height);
+      let imgModel = new ImageModel(data, height, width, uri);
+      this.routeToImageView(imgModel);
     } catch (error) {
       console.log(error);
     }
   };
 
-  async routeToImageView(uriImage, dataImage, shouldRotate) {
+  async routeToImageView(originalImgModel) {
     const {
       img,
       percentageGreen,
       percentageYellow,
-    } = await this.imageProcessor.processImage(uriImage);
+    } = await this.imageProcessor.processImage(originalImgModel.uri);
 
     this.setState({
       loading: false,
     });
 
     this.props.navigation.navigate('Imagen', {
-      image: img,
-      // originalImage: uriImage,
-      originalImage: dataImage,
-      shouldRotate: shouldRotate,
+      originalImage: originalImgModel,
+      processedImage: new ImageModel(
+        img,
+        originalImgModel.height,
+        originalImgModel.width,
+      ),
+      shouldRotate: originalImgModel.width < originalImgModel.height,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
     });
