@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.List;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.intaapp.imageprocessing.ImageProcessingOperations;
 
@@ -68,6 +69,7 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
         }
 
     }
+
 
     private void setRanges(ReadableArray firstRange, ReadableArray secondRange) {
         firstLower = firstRange.getArray(0);

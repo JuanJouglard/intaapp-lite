@@ -13,10 +13,15 @@ import {
   Spinner,
 } from 'native-base';
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {ImagePickerService} from '../../shared/services/imagePickerService';
-import {ImageProcessor} from '../../shared/services/imageProcessor';
+import {StyleSheet, Image, ImageBackground} from 'react-native';
+import {ImagePickerService, ImageProcessor, HomeCard} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
+import {slides} from '../../configuration/slides.js';
+import {ImageModel} from '../../shared/models/ImageModel.js';
+
+import {Tour} from '../../guided-tour/Tour';
+
+import AppIntroSlider from 'react-native-app-intro-slider';
 
 export class Home extends Component {
   picker;
@@ -49,34 +54,22 @@ export class Home extends Component {
             <Spinner color={mainThemeColor(1)} />
           ) : (
             <>
-              <View style={styles.cardContainer}>
-                <CardItem
-                  style={styles.card}
-                  header
-                  button
-                  onPress={this.launch('Camera')}>
-                  <Icon
-                    type="FontAwesome5"
-                    name="camera-retro"
-                    style={styles.icon}
-                  />
-                  <Text style={styles.descText}>
-                    TOMAR UNA FOTO CON LA CAMARA
-                  </Text>
-                </CardItem>
-              </View>
-              <View style={styles.cardContainer}>
-                <CardItem
-                  style={styles.card}
-                  header
-                  button
-                  onPress={this.launch('Gallery')}>
-                  <Icon name="upload" type="AntDesign" style={styles.icon} />
-                  <Text style={styles.descText}>
-                    SELECCIONAR UNA FOTO DE LA GALERIA
-                  </Text>
-                </CardItem>
-              </View>
+              <HomeCard
+                onPress={this.launch('Camera')}
+                icon={{
+                  name: 'camera-retro',
+                  type: 'FontAwesome5',
+                }}
+                text="TOMAR UNA FOTO CON LA CAMARA"
+              />
+              <HomeCard
+                onPress={this.launch('Gallery')}
+                icon={{
+                  name: 'upload',
+                  type: 'AntDesign',
+                }}
+                text="SELECCIONAR UNA FOTO DE LA GALERIA"
+              />
             </>
           )}
         </Content>
@@ -87,29 +80,36 @@ export class Home extends Component {
   launch = picker => async () => {
     this.setState({loading: true});
     try {
-      const {uri, width, height} = await this.picker['getImageFrom' + picker]();
-      this.routeToImageView(uri, width < height);
+      const {uri, data, width, height} = await this.picker[
+        'getImageFrom' + picker
+      ]();
+      let imgModel = new ImageModel(data, height, width, uri);
+      this.routeToImageView(imgModel);
     } catch (error) {
       console.log(error);
       this.setState({loading: false});
     }
   };
 
-  async routeToImageView(uriImage, shouldRotate) {
+  async routeToImageView(originalImgModel) {
     const {
       img,
       percentageGreen,
       percentageYellow,
-    } = await this.imageProcessor.processImage(uriImage);
+    } = await this.imageProcessor.processImage(originalImgModel.uri);
 
     this.setState({
       loading: false,
     });
 
     this.props.navigation.navigate('Imagen', {
-      image: img,
-      originalImage: uriImage,
-      shouldRotate: shouldRotate,
+      originalImage: originalImgModel,
+      processedImage: new ImageModel(
+        img,
+        originalImgModel.height,
+        originalImgModel.width,
+      ),
+      shouldRotate: originalImgModel.width < originalImgModel.height,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
     });
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    // backgroundColor: '#20d2bb',
   },
   card: {
     flex: 1,

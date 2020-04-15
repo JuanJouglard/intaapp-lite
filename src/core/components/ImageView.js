@@ -1,5 +1,9 @@
+import {ImageEditor} from '../../shared';
+import {mainThemeColor} from '../../configuration/colors';
 import React, {Component} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, TouchableOpacity, StyleSheet, View} from 'react-native';
+import {Icon} from 'native-base';
+
 import SwitchSelector from 'react-native-switch-selector';
 import {options} from '../../configuration/options';
 import {Percentages} from './Percentages';
@@ -9,6 +13,7 @@ export class ImageView extends Component {
     super(props);
     this.state = {
       showOriginal: false,
+      showEditor: false,
     };
   }
 
@@ -30,6 +35,16 @@ export class ImageView extends Component {
         </View>
         <View style={styles.imageContainer}>
           <Image style={this.shouldRotate()} source={this.getImage()} />
+          <TouchableOpacity
+            onPress={this.showEditor(true)}
+            style={styles.adjustButton}>
+            <Icon name="edit" type="Entypo" style={styles.icon} />
+          </TouchableOpacity>
+          <ImageEditor
+            image={this.props.route.params.originalImage}
+            showOver={this.state.showEditor}
+            onClose={this.showEditor(false)}
+          />
         </View>
         <Percentages
           percentageGreen={this.props.route.params.percentageGreen}
@@ -46,10 +61,12 @@ export class ImageView extends Component {
 
   getImage() {
     if (this.state.showOriginal) {
-      return {uri: this.props.route.params.originalImage};
+      return {
+        uri: this.props.route.params.originalImage.getSource(),
+      };
     } else {
       return {
-        uri: `data:image/png;base64,${this.props.route.params.image}`,
+        uri: this.props.route.params.processedImage.getSource(),
       };
     }
   }
@@ -64,9 +81,26 @@ export class ImageView extends Component {
       return styles.image;
     }
   }
+
+  showEditor = show => () => {
+    this.setState({
+      showEditor: show,
+    });
+  };
 }
 
 const styles = StyleSheet.create({
+  adjustButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 10,
+    backgroundColor: mainThemeColor(1),
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 60,
+    width: 60,
+  },
   imageContainer: {
     flex: 6,
     justifyContent: 'center',
@@ -88,6 +122,9 @@ const styles = StyleSheet.create({
   },
   information: {
     flex: 1,
+  },
+  icon: {
+    color: 'white',
   },
   switchContainer: {
     width: '100%',
