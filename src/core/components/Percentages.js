@@ -22,7 +22,7 @@ export class Percentages extends Component {
           />
           <Percentage
             color="#f5f7f7"
-            percentage={this.props.percentageYellow}
+            percentage={this.props.percentageNaked}
             title="Desnudo"
           />
         </View>

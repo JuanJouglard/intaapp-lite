@@ -1,10 +1,10 @@
-const lowerGreen = [40, 50, 20];
+const lowerGreen = [35, 35, 50];
 const upperGreen = [70, 255, 255];
 
 export const greenRange = [lowerGreen, upperGreen];
 
-const lowerYellow = [20, 50, 20];
-const upperYellow = [40, 255, 255];
+const lowerYellow = [20, 35, 50];
+const upperYellow = [35, 255, 255];
 
 export const yellowRange = [lowerYellow, upperYellow];
 

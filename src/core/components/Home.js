@@ -77,7 +77,7 @@ export class Home extends Component {
     );
   }
 
-  launch = picker => async () => {
+  launch = (picker) => async () => {
     this.setState({loading: true});
     try {
       const {uri, data, width, height} = await this.picker[
@@ -96,6 +96,7 @@ export class Home extends Component {
       img,
       percentageGreen,
       percentageYellow,
+      percentageNaked,
     } = await this.imageProcessor.processImage(originalImgModel.uri);
 
     this.setState({
@@ -112,6 +113,7 @@ export class Home extends Component {
       shouldRotate: originalImgModel.width < originalImgModel.height,
       percentageGreen: percentageGreen,
       percentageYellow: percentageYellow,
+      percentageNaked: percentageNaked,
     });
   }
 }

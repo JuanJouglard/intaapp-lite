@@ -49,13 +49,14 @@ export class ImageView extends Component {
         <Percentages
           percentageGreen={this.props.route.params.percentageGreen}
           percentageYellow={this.props.route.params.percentageYellow}
+          percentageNaked={this.props.route.params.percentageNaked}
         />
         <View style={styles.information} />
       </View>
     );
   }
 
-  changeImage = value => {
+  changeImage = (value) => {
     this.setState({showOriginal: value});
   };
 
@@ -82,7 +83,7 @@ export class ImageView extends Component {
     }
   }
 
-  showEditor = show => () => {
+  showEditor = (show) => () => {
     this.setState({
       showEditor: show,
     });

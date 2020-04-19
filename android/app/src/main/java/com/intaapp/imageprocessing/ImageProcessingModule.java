@@ -64,6 +64,7 @@ public class ImageProcessingModule extends ReactContextBaseJavaModule {
             promise.resolve(resultMap);
 
         } catch (Exception e) {
+            Log.d("OURERROR",e.getMessage());
             promise.reject("OpenCv","Error processing image in java module");
             e.printStackTrace();
         }
