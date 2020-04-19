@@ -39,8 +39,6 @@ public class CustomImageView extends ReactImageView {
     public void setImageSource(Image img) {
         this.sourceImage = img;
         this.setSource(img.getSource());
-        if (img.getWidth() < img.getHeight())
-            this.setRotation(90);
     }
 
 
