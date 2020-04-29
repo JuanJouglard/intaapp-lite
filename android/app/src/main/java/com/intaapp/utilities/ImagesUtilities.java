@@ -40,13 +40,15 @@ public class ImagesUtilities {
         Mat aux = new Mat(bitmap.getHeight(),bitmap.getWidth(), CvType.CV_8UC4);
         Utils.bitmapToMat(bitmap,aux);
 
-
-        if (width > height) {
+        Log.i("SIZES","CONDITION"+(((float)width)/aux.width()) +" - "+ (((float)height)/aux.height()));
+        if ((((float)width)/aux.width()) > (((float)height)/aux.height())) {
+            Log.i("SIZES", "PRIMER CASO");
             cropWidth = aux.width();
             factor = width / cropWidth;
             cropHeight = height / factor;
         }
         else {
+            Log.i("SIZES", "SEGUNDO CASO");
             cropHeight = aux.height();
             factor = height / cropHeight;
             cropWidth = width / factor;
