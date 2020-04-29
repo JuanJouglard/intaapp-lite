@@ -32,9 +32,11 @@ export class ImageEditor extends Component {
             resizeMode="contain"
             style={styles.image}
             src={{
-              source: [{
-                uri: this.props.image.getSource(),
-              }],
+              source: [
+                {
+                  uri: this.props.image.getSource(),
+                },
+              ],
               width: this.props.image.getWidth(),
               height: this.props.image.getHeight(),
             }}
@@ -66,7 +68,7 @@ export class ImageEditor extends Component {
   };
 
   save = (event) => {
-    console.log('onSave', event.nativeEvent.uri);
+    this.props.updateImage(event.nativeEvent.uri);
   };
 
   resetState = () => {

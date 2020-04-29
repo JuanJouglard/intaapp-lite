@@ -34,6 +34,10 @@ export class ImageModel {
     this.height = height;
   }
 
+  setData(data) {
+    this.data = data;
+  }
+
   getSource() {
     if (this.uri) {
       return this.uri;

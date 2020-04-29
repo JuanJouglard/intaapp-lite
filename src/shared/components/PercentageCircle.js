@@ -3,7 +3,7 @@ import {Dimensions, Text, View, StyleSheet} from 'react-native';
 import ProgressCircle from 'react-native-progress/Circle';
 
 export function Percentage(props) {
-  const formatText = progress => () => {
+  const formatText = (progress) => () => {
     return `${progress}%`;
   };
 
@@ -11,6 +11,7 @@ export function Percentage(props) {
     <View style={styles.circle}>
       <Text style={styles.title}>{props.title}</Text>
       <ProgressCircle
+        useNativeDriver={true}
         thickness={7}
         color={props.color}
         progress={props.percentage / 100}
