@@ -1,4 +1,4 @@
-import {ImageEditor} from '../../shared';
+import {ImageEditor, ImageProcessor} from '../../shared';
 import {mainThemeColor} from '../../configuration/colors';
 import React, {Component} from 'react';
 import {Image, TouchableOpacity, StyleSheet, View} from 'react-native';
@@ -9,12 +9,20 @@ import {options} from '../../configuration/options';
 import {Percentages} from './Percentages';
 
 export class ImageView extends Component {
+  imageProcessor;
+
   constructor(props) {
     super(props);
     this.state = {
       showOriginal: false,
       showEditor: false,
+      originalImage: this.props.route.params.originalImage,
+      processedImage: this.props.route.params.processedImage,
+      percentageGreen: this.props.route.params.percentageGreen,
+      percentageYellow: this.props.route.params.percentageYellow,
+      percentageNaked: this.props.route.params.percentageNaked,
     };
+    this.imageProcessor = ImageProcessor.getInstance();
   }
 
   render() {
@@ -41,32 +49,53 @@ export class ImageView extends Component {
             <Icon name="edit" type="Entypo" style={styles.icon} />
           </TouchableOpacity>
           <ImageEditor
-            image={this.props.route.params.originalImage}
+            image={this.state.originalImage}
             showOver={this.state.showEditor}
+            updateImage={this.updateOriginalImage}
             onClose={this.showEditor(false)}
           />
         </View>
         <Percentages
-          percentageGreen={this.props.route.params.percentageGreen}
-          percentageYellow={this.props.route.params.percentageYellow}
+          percentageGreen={this.state.percentageGreen}
+          percentageYellow={this.state.percentageYellow}
+          percentageNaked={this.state.percentageNaked}
         />
         <View style={styles.information} />
       </View>
     );
   }
 
-  changeImage = value => {
+  changeImage = (value) => {
     this.setState({showOriginal: value});
+  };
+
+  updateOriginalImage = async (newUri) => {
+    let nativeReponse = await this.imageProcessor.processImage('file://' + newUri);
+
+    this.setState((prevState) => {
+      let newState = {
+        ...prevState,
+      };
+      newState.originalImage.setUri('file://' + newUri);
+      console.log(newState.processedImage);
+
+      newState.processedImage.setData(nativeReponse.img);
+      newState.percentageGreen = nativeReponse.percentageGreen;
+      newState.percentageYellow = nativeReponse.percentageYellow;
+      newState.percentageNaked = nativeReponse.percentageNaked;
+
+      return newState;
+    });
   };
 
   getImage() {
     if (this.state.showOriginal) {
       return {
-        uri: this.props.route.params.originalImage.getSource(),
+        uri: this.state.originalImage.getSource(),
       };
     } else {
       return {
-        uri: this.props.route.params.processedImage.getSource(),
+        uri: this.state.processedImage.getSource(),
       };
     }
   }
@@ -82,7 +111,7 @@ export class ImageView extends Component {
     }
   }
 
-  showEditor = show => () => {
+  showEditor = (show) => () => {
     this.setState({
       showEditor: show,
     });

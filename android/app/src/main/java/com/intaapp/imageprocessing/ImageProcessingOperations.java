@@ -22,16 +22,20 @@ import com.facebook.react.bridge.WritableMap;
 
 public class ImageProcessingOperations {
 
-    private double percentageGreen, percentageYellow;
-    private Mat mat,result,firstMask,secondMask,finalMask;
+    private double percentageGreen, percentageYellow, percentageOverlap;
+    private Mat mat,result,firstMask,secondMask,finalMask, overlapMask;
 
     public ByteArrayOutputStream getBase64Image(String fileUri, ReactApplicationContext context, ReadableArray firstLower, ReadableArray firstUpper, ReadableArray secondLower, ReadableArray secondUpper) throws IOException {
         Bitmap img = Bitmap.createBitmap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(fileUri)));
         mat = convertBitmapToMat(img);
         initializeMasks(img);
         getMasks(firstLower,firstUpper,secondLower,secondUpper);
+        Core.bitwise_and(firstMask, secondMask, overlapMask);
+        percentageOverlap = getPercentage(img,overlapMask);
         percentageGreen = getPercentage(img,firstMask);
         percentageYellow = getPercentage(img,secondMask);
+        percentageYellow -= Math.round(percentageOverlap / 2);
+        percentageGreen -= Math.round(percentageOverlap / 2);
 
         Core.add(firstMask,secondMask,finalMask);
 
@@ -49,6 +53,7 @@ public class ImageProcessingOperations {
         wm.putString("img",imageLocation);
         wm.putDouble("percentageGreen",percentageGreen);
         wm.putDouble("percentageYellow",percentageYellow);
+        wm.putDouble("percentageNaked",100 - percentageYellow - percentageGreen);
         return wm;
     }
 
@@ -63,6 +68,7 @@ public class ImageProcessingOperations {
         firstMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
         secondMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
         finalMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
+        overlapMask = new Mat(img.getHeight(),img.getWidth(), CvType.CV_8UC1);
         Imgproc.cvtColor(mat,result,Imgproc.COLOR_RGB2HSV);
     }
 
