@@ -65,19 +65,20 @@ export class ImageView extends Component {
     );
   }
 
-  changeImage = (value) => {
+  changeImage = value => {
     this.setState({showOriginal: value});
   };
 
-  updateOriginalImage = async (newUri) => {
-    let nativeReponse = await this.imageProcessor.processImage('file://' + newUri);
+  updateOriginalImage = async newUri => {
+    let nativeReponse = await this.imageProcessor.processImage(
+      'file://' + newUri,
+    );
 
-    this.setState((prevState) => {
+    this.setState(prevState => {
       let newState = {
         ...prevState,
       };
       newState.originalImage.setUri('file://' + newUri);
-      console.log(newState.processedImage);
 
       newState.processedImage.setData(nativeReponse.img);
       newState.percentageGreen = nativeReponse.percentageGreen;
@@ -111,7 +112,7 @@ export class ImageView extends Component {
     }
   }
 
-  showEditor = (show) => () => {
+  showEditor = show => () => {
     this.setState({
       showEditor: show,
     });

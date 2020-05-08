@@ -1,5 +1,5 @@
 import {mainThemeColor} from '../../configuration/colors.js';
-import {StyleSheet, Image, Dimensions, View, Text} from 'react-native';
+import {StyleSheet, Dimensions, View, Text} from 'react-native';
 import React, {Component} from 'react';
 import Popover from 'react-native-popover-view';
 import {Button} from 'native-base';
@@ -67,7 +67,7 @@ export class ImageEditor extends Component {
     this.props.onClose();
   };
 
-  save = (event) => {
+  save = event => {
     this.props.updateImage(event.nativeEvent.uri);
   };
 
@@ -78,13 +78,13 @@ export class ImageEditor extends Component {
   };
 
   getAdjustmentSliders() {
-    return imageAdjusts.map((adjust) => {
+    return imageAdjusts.map(adjust => {
       return (
         <View key={adjust.key} style={styles.sliderContainer}>
           <Text>{adjust.title}</Text>
           <Slider
             style={{width: 300, height: 50}}
-            value={adjust.defaultValue}
+            value={this.state[adjust.type]}
             minimumValue={adjust.minimumValue}
             maximumValue={adjust.maximumValue}
             minimumTrackTintColor={mainThemeColor(1)}
@@ -96,7 +96,7 @@ export class ImageEditor extends Component {
     });
   }
 
-  updateValue = (type) => (value) => {
+  updateValue = type => value => {
     this.setState({
       [type]: value,
     });
