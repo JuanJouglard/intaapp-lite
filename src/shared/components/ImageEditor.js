@@ -1,11 +1,10 @@
-import {mainThemeColor} from '../../configuration/colors.js';
-import {StyleSheet, Dimensions, View, Text} from 'react-native';
-import React, {Component} from 'react';
-import Popover from 'react-native-popover-view';
 import {Button} from 'native-base';
-import Slider from '@react-native-community/slider';
-import {imageAdjusts} from '../../configuration/image-adjustment.js';
+import React, {Component} from 'react';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import Popover from 'react-native-popover-view';
+import {imageAdjusts} from '../../configuration';
 import CustomImage from './CustomNativeImage';
+import {Sliders} from './Sliders';
 
 export class ImageEditor extends Component {
   constructor(props) {
@@ -46,7 +45,7 @@ export class ImageEditor extends Component {
           />
         </View>
         <View style={styles.settingsContainer}>
-          {this.getAdjustmentSliders()}
+          <Sliders updateValue={this.updateValue} />
         </View>
         <View style={styles.buttonsContainer}>
           <Button style={styles.button} onPress={this.props.onClose} light>
@@ -76,25 +75,6 @@ export class ImageEditor extends Component {
       saveImg: false,
     });
   };
-
-  getAdjustmentSliders() {
-    return imageAdjusts.map(adjust => {
-      return (
-        <View key={adjust.key} style={styles.sliderContainer}>
-          <Text>{adjust.title}</Text>
-          <Slider
-            style={{width: 300, height: 50}}
-            value={this.state[adjust.type]}
-            minimumValue={adjust.minimumValue}
-            maximumValue={adjust.maximumValue}
-            minimumTrackTintColor={mainThemeColor(1)}
-            thumbTintColor={mainThemeColor(1)}
-            onValueChange={this.updateValue(adjust.type)}
-          />
-        </View>
-      );
-    });
-  }
 
   updateValue = type => value => {
     this.setState({
@@ -137,8 +117,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flex: 3,
     justifyContent: 'center',
-  },
-  sliderContainer: {
-    alignItems: 'center',
   },
 });

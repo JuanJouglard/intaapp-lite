@@ -13,7 +13,7 @@ public class StorageSave {
 
     public String saveToExternalStorage(Bitmap bmp) {
         FileOutputStream fos = null;
-        String uri = Environment.getExternalStorageDirectory().toString()+"/Pictures/IntaApp/"+System.currentTimeMillis()+".png";
+        String uri = Environment.getExternalStorageDirectory().toString()+"/Pictures/IntaApp/"+System.currentTimeMillis()+".jpeg";
         try {
             fos = new FileOutputStream(new File(uri));
         } catch (FileNotFoundException e) {

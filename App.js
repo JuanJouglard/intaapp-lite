@@ -11,7 +11,7 @@ class App extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      showRealApp: false,
+      showRealApp: null,
     };
   }
   async componentDidMount() {
@@ -51,7 +51,11 @@ class App extends PureComponent {
         </NavigationContainer>
       );
     } else {
-      return <Tour onDone={this._onDone} />;
+      if (this.state.showRealApp === false) {
+        return <Tour onDone={this._onDone} />;
+      } else {
+        return null;
+      }
     }
   }
 }

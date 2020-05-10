@@ -11,7 +11,6 @@ export function Percentage(props) {
     <View style={styles.circle}>
       <Text style={styles.title}>{props.title}</Text>
       <ProgressCircle
-        useNativeDriver={true}
         thickness={7}
         color={props.color}
         progress={props.percentage / 100}

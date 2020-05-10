@@ -1,5 +1,5 @@
 import {StyleSheet, View, Text} from 'react-native';
-import React, {Components} from 'react';
+import React from 'react';
 import {CardItem, Icon} from 'native-base';
 
 export function HomeCard(props) {
