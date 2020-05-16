@@ -4,4 +4,4 @@ export {Percentage} from './components/PercentageCircle';
 export {ImageProcessor} from './services/imageProcessor';
 export {ImagePickerService} from './services/imagePickerService';
 export {CustomImage} from './components/CustomNativeImage';
-export {ImageWithButton} from './components/ImageWithButton';
+export {ImageWithAdjustment} from './components/imageWithButton';

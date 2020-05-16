@@ -45,4 +45,8 @@ export class ImageModel {
       return `data:image/png;base64,${this.data}`;
     }
   }
+
+  get shouldRotate() {
+    return this.width < this.height;
+  }
 }

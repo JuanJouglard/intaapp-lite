@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {percentages, mainThemeColor} from '../../configuration';
-
 import {Percentage} from '../../shared';
-import {mainThemeColor} from '../../configuration/colors';
 
 export class Percentages extends Component {
   render() {
@@ -11,9 +9,12 @@ export class Percentages extends Component {
       <View style={styles.percentages}>
         <Text style={styles.cover}>Cubrimiento</Text>
         <View style={styles.circlesContainer}>
-          {percentages.map(percentage => {
+          {percentages.map(( percentage, index ) => {
             return (
               <Percentage
+		  key={
+ index
+	      }
                 color={percentage.color}
                 percentage={this.props['percentage' + percentage.type]}
                 title={percentage.title}

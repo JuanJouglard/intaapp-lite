@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import SwitchSelector from 'react-native-switch-selector';
 import {options, switchConfig} from '../../configuration';
-import {ImageProcessor, ImageWithButton} from '../../shared';
+import {ImageProcessor, ImageWithAdjustment} from '../../shared';
 import {Percentages} from './Percentages';
 
 export class ImageView extends Component {
@@ -32,7 +32,7 @@ export class ImageView extends Component {
             {...switchConfig}
           />
         </View>
-        <ImageWithButton
+        <ImageWithAdjustment
           onImageAdjusted={this.updateOriginalImage}
           imageToEdit={this.state.originalImage}
           shouldRotate={this.props.route.params.shouldRotate}
@@ -69,11 +69,9 @@ export class ImageView extends Component {
 
   getImage() {
     let sourceOfImage = this.state.showOriginal
-      ? this.state.originalImage.getSource()
-      : this.state.processedImage.getSource();
-    return {
-      uri: sourceOfImage,
-    };
+      ? this.state.originalImage
+      : this.state.processedImage;
+    return sourceOfImage;
   }
 }
 
