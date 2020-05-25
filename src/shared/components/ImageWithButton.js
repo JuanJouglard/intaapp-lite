@@ -11,6 +11,7 @@ export class ImageWithAdjustment extends Component {
       showEditor: false,
     };
   }
+
   render() {
     return (
       <View style={styles.imageContainer}>
@@ -32,11 +33,13 @@ export class ImageWithAdjustment extends Component {
       </View>
     );
   }
+
   showEditor = show => () => {
     this.setState({
       showEditor: show,
     });
   };
+
   shouldRotate() {
     let imageStyles = styles.image;
     if (this.props.imageToShow.shouldRotate) {
