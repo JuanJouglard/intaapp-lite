@@ -30,16 +30,6 @@ export class Home extends Component {
   render() {
     return (
       <Container>
-        <Header
-          style={{
-            backgroundColor: mainThemeColor(1),
-          }}>
-          <Left />
-          <Body>
-            <Title>INTA</Title>
-          </Body>
-          <Right />
-        </Header>
         <Content contentContainerStyle={styles.container}>
           {this.state.loading ? (
             <Spinner color={mainThemeColor(1)} />
@@ -52,16 +42,14 @@ export class Home extends Component {
   }
 
   getHomeButtons() {
-    return homeButtons.map((button, index) => {
-      return (
-        <HomeCard
-          key={index}
-          onPress={this.launch(button.type)}
-          icon={button.icon}
-          text={button.text}
-        />
-      );
-    });
+    return homeButtons.map((button, index) => (
+      <HomeCard
+        key={index}
+        onPress={this.launch(button.type)}
+        icon={button.icon}
+        text={button.text}
+      />
+    ));
   }
 
   launch = picker => async () => {
