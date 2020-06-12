@@ -6,11 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -20,18 +17,14 @@ import com.facebook.react.views.image.ImageResizeMode;
 import com.intaapp.utilities.ImagesUtilities;
 import com.intaapp.utilities.models.Image;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class ReactImageManager extends SimpleViewManager<CustomImageView> {
 
     ReactApplicationContext mCallerContext;
-    float currentBright;
-    float currentSat;
-    float currentContrast;
-    ImagesUtilities imgSaver;
-    CustomImageView view;
-
+    private float currentBright;
+    private float currentSat;
+    private float currentContrast;
 
     public ReactImageManager(ReactApplicationContext context) {
         mCallerContext = context;

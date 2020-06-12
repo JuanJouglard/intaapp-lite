@@ -20,8 +20,6 @@
     "react": "16.9.0",
     "react-native": "^0.62.0",
     "react-native-app-intro-slider": "^3.0.0",
-    "react-native-camera": "^3.19.2",
-    "react-native-color-matrix-image-filters": "^5.2.4",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-picker": "^2.3.1",

@@ -1,10 +1,13 @@
 import React, {PureComponent} from 'react';
 import {Tour} from './src/guided-tour/Tour';
+import {Icon} from 'native-base';
 import {Home} from './src/core/components/Home';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {ImageView} from './src/core/components/ImageView';
 import AsyncStorage from '@react-native-community/async-storage';
+import {mainThemeColor} from './src/configuration';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 
 const Stack = createStackNavigator();
 class App extends PureComponent {
@@ -21,8 +24,8 @@ class App extends PureComponent {
     });
   }
 
-  _onDone = () => {
-    this.setState({showRealApp: true});
+  hideTour = show => () => {
+    this.setState({showRealApp: show});
     AsyncStorage.setItem('@OldUser', 'true');
   };
 
@@ -30,30 +33,55 @@ class App extends PureComponent {
     if (this.state.showRealApp) {
       return (
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerStyle: {
+                elevation: 0,
+                backgroundColor: mainThemeColor(1),
+              },
+              headerTintColor: '#f5f7f7',
+              headerRight: () => (
+                <TouchableOpacity onPress={this.hideTour(null)}>
+                  <Icon
+                    style={styles.menuicon}
+                    type="FontAwesome5"
+                    name="ellipsis-v"
+                  />
+                </TouchableOpacity>
+              ),
+            }}>
             <Stack.Screen
               name="Home"
               component={Home}
-              options={{headerShown: false}}
+              options={{title: 'Inicio'}}
             />
             <Stack.Screen
               name="Imagen"
               component={ImageView}
               options={{
-                headerStyle: {
-                  elevation: 0,
-                  backgroundColor: '#1f2f33',
-                },
-                headerTintColor: '#f5f7f7',
+                title: 'Imagen',
               }}
             />
           </Stack.Navigator>
         </NavigationContainer>
       );
     } else {
-      return <Tour onDone={this._onDone} />;
+      if (this.state.showRealApp === false) {
+        return null;
+      } else {
+        return <Tour onDone={this.hideTour(true)} />;
+      }
     }
   }
 }
+
+const styles = StyleSheet.create({
+  menuicon: {
+    color: '#f5f7f7',
+    fontSize: 20,
+    marginRight: 20,
+  },
+});
 
 export default App;

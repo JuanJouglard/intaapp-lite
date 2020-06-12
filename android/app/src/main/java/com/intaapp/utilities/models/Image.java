@@ -1,7 +1,6 @@
 package com.intaapp.utilities.models;
 
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.WritableArray;
 
 public class Image {
 
