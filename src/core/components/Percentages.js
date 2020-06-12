@@ -9,12 +9,10 @@ export class Percentages extends Component {
       <View style={styles.percentages}>
         <Text style={styles.cover}>Cubrimiento</Text>
         <View style={styles.circlesContainer}>
-          {percentages.map(( percentage, index ) => {
+          {percentages.map((percentage, index) => {
             return (
               <Percentage
-		  key={
- index
-	      }
+                key={index}
                 color={percentage.color}
                 percentage={this.props['percentage' + percentage.type]}
                 title={percentage.title}
@@ -29,7 +27,7 @@ export class Percentages extends Component {
 
 const styles = StyleSheet.create({
   percentages: {
-    flex: 5,
+    flex: 4,
     width: '90%',
     borderRadius: 25,
     backgroundColor: mainThemeColor(1),
@@ -37,6 +35,8 @@ const styles = StyleSheet.create({
     padding: 25,
     elevation: 3,
     paddingTop: 0,
+    paddingBottom: 5,
+    marginBottom: 10,
   },
   circlesContainer: {
     flex: 1,

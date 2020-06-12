@@ -43,7 +43,6 @@ export class ImageView extends Component {
           percentageYellow={this.state.percentageYellow}
           percentageNaked={this.state.percentageNaked}
         />
-        <View style={styles.information} />
       </View>
     );
   }
