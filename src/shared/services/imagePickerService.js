@@ -9,8 +9,8 @@ export class ImagePickerService {
     rotation: 360,
     quality: 1,
     noData: false,
-    maxWidth: 1920,
-    maxHeigth: 1920,
+    maxWidth: 1080,
+    maxHeigth: 1080,
   };
 
   static getInstance() {
