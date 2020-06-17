@@ -1,13 +1,4 @@
-import {
-  Body,
-  Container,
-  Content,
-  Header,
-  Left,
-  Right,
-  Spinner,
-  Title,
-} from 'native-base';
+import {Container, Content, Spinner} from 'native-base';
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 import {mainThemeColor, homeButtons} from '../../configuration';

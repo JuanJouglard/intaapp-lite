@@ -8,7 +8,6 @@ export class ImagePickerService {
     cameraType: 'back',
     rotation: 360,
     quality: 1,
-    noData: false,
     maxWidth: 1080,
     maxHeigth: 1080,
   };

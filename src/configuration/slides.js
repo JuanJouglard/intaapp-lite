@@ -23,42 +23,18 @@ export const slides = [
   },
   {
     key: 's3',
-    title: 'Great Offers',
-    text: 'Enjoy Great offers on our all services',
-    image: {
-      uri:
-        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_discount.png',
-    },
+    title: 'Imagen Procesada',
+    text:
+      'Luego de elegir la foto, la misma sera procesada por la app y podras ver que partes de la imagen presentan cubrimiento. Tambien tendras la opcion de ver la imagen original.',
+    image: require('../guided-tour/assets/prueba12.jpeg'),
     backgroundColor: '#22bcb5',
   },
   {
     key: 's4',
-    title: 'Best Deals',
-    text: ' Best Deals on all our services',
-    image: {
-      uri:
-        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_best_deals.png',
-    },
+    title: 'Porcentajes de Cubrimiento',
+    text:
+      'Mas abajo en la misma pantalla, podras ver que porcentaje de la imagen se encuentra: cubierto con vegetacion viva, vegetacion muerta o sin cubrir',
+    image: require('../guided-tour/assets/prueba12.jpeg'),
     backgroundColor: '#3395ff',
-  },
-  {
-    key: 's5',
-    title: 'Bus Booking',
-    text: 'Enjoy Travelling on Bus with flat 100% off',
-    image: {
-      uri:
-        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_bus_ticket_booking.png',
-    },
-    backgroundColor: '#f6437b',
-  },
-  {
-    key: 's6',
-    title: 'Train Booking',
-    text: ' 10% off on first Train booking',
-    image: {
-      uri:
-        'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_train_ticket_booking.png',
-    },
-    backgroundColor: '#febe29',
   },
 ];

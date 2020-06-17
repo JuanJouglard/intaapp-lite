@@ -65,20 +65,20 @@ public class ReactImageManager extends SimpleViewManager<CustomImageView> {
 
     @ReactProp(name = "brightness")
     public void setBrightness(CustomImageView view, @Nullable float brightness) {
-        currentBright = brightness;
-        view.applyFilter(brightness,currentContrast,currentSat);
+	currentBright = brightness;
+	view.applyFilter(brightness,currentContrast,currentSat);
     }
 
     @ReactProp(name = "saturation")
     public void setSaturation(CustomImageView view, @Nullable float saturation) {
-        currentSat = saturation;
-        view.applyFilter(currentBright,currentContrast,saturation);
+	currentSat = saturation;
+	view.applyFilter(currentBright,currentContrast,saturation);
     }
 
     @ReactProp(name = "contrast")
     public void setContrast(CustomImageView view, @Nullable float contrast) {
-        currentContrast = contrast;
-        view.applyFilter(currentBright, contrast, currentSat);
+	currentContrast = contrast;
+	view.applyFilter(currentBright, contrast, currentSat);
     }
 
     @ReactProp(name = ViewProps.RESIZE_MODE)
@@ -88,9 +88,9 @@ public class ReactImageManager extends SimpleViewManager<CustomImageView> {
 
     @ReactProp(name = "saveImage")
     public void saveImage(CustomImageView view, @Nullable boolean save) {
-        Log.i("SAVEIMG", save+"");
         if (save) {
             view.saveImageToStorage();
+	    view.clearColorFilter();
         }
     }
 
