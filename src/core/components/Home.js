@@ -52,12 +52,12 @@ export class Home extends Component {
       let imgModel = new ImageModel(data, height, width, uri);
       this.routeToImageView(imgModel);
     } catch (error) {
-      console.log(error);
       this.setState({loading: false});
     }
   };
 
   async routeToImageView(originalImgModel) {
+    const now = Date.now();
     const {
       img,
       //TODO: Encapsulate percentages in one object
@@ -65,7 +65,7 @@ export class Home extends Component {
       percentageYellow,
       percentageNaked,
     } = await this.imageProcessor.processImage(originalImgModel.uri);
-
+    console.log('Elapsed time: ', Date.now() - now, 'ms');
     this.setState({
       loading: false,
     });
