@@ -45,7 +45,12 @@ export class ImageEditor extends Component {
           />
         </View>
         <View style={styles.settingsContainer}>
-          <Sliders updateValue={this.updateValue} />
+          <Sliders
+            updateValue={this.updateValue}
+            contrast={this.state.contrast}
+            brightness={this.state.brightness}
+            saturation={this.state.saturation}
+          />
         </View>
         <View style={styles.buttonsContainer}>
           <Button style={styles.button} onPress={this.props.onClose} light>
@@ -110,8 +115,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 4,
     width: '100%',
-    borderColor: 'black',
-    borderWidth: 5,
   },
   settingsContainer: {
     marginTop: 10,

@@ -7,6 +7,7 @@ import {Percentages} from './Percentages';
 
 export class ImageView extends Component {
   imageProcessor;
+  originalImage;
 
   constructor(props) {
     super(props);
@@ -14,6 +15,7 @@ export class ImageView extends Component {
       showOriginal: false,
       ...this.props.route.params,
     };
+    this.originalImage = this.state.originalImage.clone();
     this.imageProcessor = ImageProcessor.getInstance();
   }
 
@@ -34,7 +36,7 @@ export class ImageView extends Component {
         </View>
         <ImageWithAdjustment
           onImageAdjusted={this.updateOriginalImage}
-          imageToEdit={this.state.originalImage}
+          imageToEdit={this.originalImage}
           shouldRotate={this.props.route.params.shouldRotate}
           imageToShow={this.getImage()}
         />

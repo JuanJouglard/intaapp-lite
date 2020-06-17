@@ -20,7 +20,7 @@ export class Sliders extends Component {
           <Text>{adjust.title}</Text>
           <Slider
             style={{width: 300, height: 50}}
-            value={adjust.defaultValue}
+            value={this.props[adjust.type]}
             minimumValue={adjust.minimumValue}
             maximumValue={adjust.maximumValue}
             minimumTrackTintColor={mainThemeColor(1)}

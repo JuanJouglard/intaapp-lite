@@ -18,13 +18,13 @@ public class StorageSave {
             directory.mkdir();
         }
         
-        String uri = directoryName+System.currentTimeMillis()+".png";
+        String uri = directoryName+System.currentTimeMillis()+".jpeg";
         try {
             fos = new FileOutputStream(new File(uri));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        bmp.compress(Bitmap.CompressFormat.PNG,100,fos);
+        bmp.compress(Bitmap.CompressFormat.JPEG,100,fos);
         return uri;
     }
 }

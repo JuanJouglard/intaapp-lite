@@ -46,7 +46,7 @@ class App extends PureComponent {
                   <Icon
                     style={styles.menuicon}
                     type="FontAwesome5"
-                    name="ellipsis-v"
+                    name="question-circle"
                   />
                 </TouchableOpacity>
               ),
@@ -79,7 +79,7 @@ class App extends PureComponent {
 const styles = StyleSheet.create({
   menuicon: {
     color: '#f5f7f7',
-    fontSize: 20,
+    fontSize: 24,
     marginRight: 20,
   },
 });

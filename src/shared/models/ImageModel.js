@@ -49,4 +49,8 @@ export class ImageModel {
   get shouldRotate() {
     return this.width < this.height;
   }
+
+  clone() {
+    return new ImageModel(this.data, this.height, this.width, this.uri);
+  }
 }
