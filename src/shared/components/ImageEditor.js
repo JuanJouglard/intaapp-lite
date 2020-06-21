@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   popover: {
     width: Dimensions.get('screen').width * 0.9,
-    height: Dimensions.get('screen').height * 0.7,
+    height: Dimensions.get('screen').height * 0.9,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
@@ -113,8 +113,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   imageContainer: {
-    flex: 4,
+    flex: 3,
     width: '100%',
+    paddingHorizontal: 5,
+    paddingTop: 5,
   },
   settingsContainer: {
     marginTop: 10,
