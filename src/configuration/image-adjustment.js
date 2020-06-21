@@ -11,7 +11,7 @@ export const imageAdjusts = [
   },
   {
     key: 1,
-    title: 'Saturacion',
+    title: 'Saturación',
     type: 'saturation',
     maximumValue: 2,
     minimumValue: 0,

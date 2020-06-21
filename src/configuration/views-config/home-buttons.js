@@ -1,6 +1,6 @@
 export const homeButtons = [
   {
-    text: 'SELECCIONAR UNA FOTO DE LA GALERIA',
+    text: 'SELECCIONAR UNA FOTO DE LA GALERÍA',
     icon: {
       name: 'upload',
       type: 'AntDesign',
@@ -8,7 +8,7 @@ export const homeButtons = [
     type: 'Gallery',
   },
   {
-    text: 'TOMAR UNA FOTO CON LA CAMARA',
+    text: 'TOMAR UNA FOTO CON LA CÁMARA',
     icon: {
       name: 'camera-retro',
       type: 'FontAwesome5',

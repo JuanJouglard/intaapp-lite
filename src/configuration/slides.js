@@ -19,7 +19,7 @@ export const slides = [
     key: 's3',
     title: 'Porcentajes',
     text:
-      'En esta vista podrá observar que procentaje del suelo esta cubierto con vegetacion viva, muerta o se encuentra sin cubrir',
+      'En esta vista podrá observar que porcentaje del suelo está cubierto con vegetación viva, muerta o se encuentra sin cubrir',
     image: require('../guided-tour/assets/Percentages2.png'),
     backgroundColor: '#22bcb5',
   },
@@ -27,7 +27,7 @@ export const slides = [
     key: 's4',
     title: 'Imagen procesada',
     text:
-      'En esta sección podrá observar que partes de la imagen han sido detectadas por la app como vegetación. Los sectores que aparecen en negro son detectados como suelo desnudo. También tendrá la opción de observar la imagen original.',
+      'Aquí podrá observar que partes de la imagen han sido detectadas como vegetación. Los sectores que aparecen en negro son detectados como suelo desnudo. También podrá de observar la imagen original.',
     image: require('../guided-tour/assets/ProcessedImage.png'),
     backgroundColor: '#febe29',
   },
@@ -35,7 +35,7 @@ export const slides = [
     key: 's5',
     title: 'Ajustes',
     text:
-      'Aquí podrá modificar el brillo, saturacion y contraste de la imagen, con el fin de poder mejorarla. Luego de presionar "Confirmar", se realiza nuevamente el procesamiento de la misma.',
+      'Aquí podrá modificar el brillo, saturación y contraste de la imagen, con el fin de poder mejorarla. Luego de presionar "Confirmar", se realizará nuevamente el procesamiento.',
     image: require('../guided-tour/assets/Adjustment.jpg'),
     backgroundColor: '#ED4D6E',
   },
