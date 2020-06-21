@@ -3,7 +3,7 @@ const upperGreen = [70, 255, 255];
 
 export const greenRange = [lowerGreen, upperGreen];
 
-const lowerYellow = [20, 35, 50];
+const lowerYellow = [15, 30, 50];
 const upperYellow = [35, 255, 255];
 
 export const yellowRange = [lowerYellow, upperYellow];

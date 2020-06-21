@@ -1,40 +1,43 @@
 export const slides = [
   {
     key: 's1',
-    title: 'Usá tu cámara',
+    title: 'Bienvenidos',
     text:
-      'Sacá una foto y obtene al instante el cubrimiento del suelo. Tendrás el porcentaje de material vegetal (vivo o muerto) y también el de suelo desnudo',
-    image: require('../guided-tour/assets/prueba12.jpeg'),
-    // uri:
-    //   'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_mobile_recharge.png',
+      'Esta app te ayudará a determinar el porcentaje de cubrimiento que presenta un suelo',
+    image: null,
     backgroundColor: '#3395ff',
-    // backgroundColor: '#20d2bb',
   },
   {
     key: 's2',
-    title: 'O elegí de tu galería',
-    text: 'Podes seleccionr fotos viejas o sacadas por otra persona',
-    image: require('../guided-tour/assets/prueba1.jpg'),
-    // image: {
-    //   uri:
-    //     'https://raw.githubusercontent.com/AboutReact/sampleresource/master/intro_flight_ticket_booking.png',
-    // },
-    backgroundColor: '#febe29',
+    title: 'Elegir imagen',
+    text:
+      'Podrá seleccionar una imagen desde la galería o tomar una en el momento utilizando la cámara',
+    image: require('../guided-tour/assets/Home.jpg'),
+    backgroundColor: '#DB6C79',
   },
   {
     key: 's3',
-    title: 'Imagen Procesada',
+    title: 'Porcentajes',
     text:
-      'Luego de elegir la foto, la misma sera procesada por la app y podras ver que partes de la imagen presentan cubrimiento. Tambien tendras la opcion de ver la imagen original.',
-    image: require('../guided-tour/assets/prueba12.jpeg'),
+      'En esta vista podrá observar que procentaje del suelo esta cubierto con vegetacion viva, muerta o se encuentra sin cubrir',
+    image: require('../guided-tour/assets/Percentages2.png'),
     backgroundColor: '#22bcb5',
   },
   {
     key: 's4',
-    title: 'Porcentajes de Cubrimiento',
+    title: 'Imagen procesada',
     text:
-      'Mas abajo en la misma pantalla, podras ver que porcentaje de la imagen se encuentra: cubierto con vegetacion viva, vegetacion muerta o sin cubrir',
-    image: require('../guided-tour/assets/prueba12.jpeg'),
-    backgroundColor: '#3395ff',
+      'En esta sección podrá observar que partes de la imagen han sido detectadas por la app como vegetación. Los sectores que aparecen en negro son detectados como suelo desnudo. También tendrá la opción de observar la imagen original.',
+    image: require('../guided-tour/assets/ProcessedImage.png'),
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 's5',
+    title: 'Ajustes',
+    text:
+      'Aquí podrá modificar el brillo, saturacion y contraste de la imagen, con el fin de poder mejorarla. Luego de presionar "Confirmar", se realiza nuevamente el procesamiento de la misma.',
+    image: require('../guided-tour/assets/Adjustment.jpg'),
+    backgroundColor: '#ED4D6E',
   },
 ];
+

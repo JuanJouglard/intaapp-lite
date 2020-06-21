@@ -1,4 +1,4 @@
 export const options = [
-  {label: 'Mascara', value: false},
+  {label: 'Máscara', value: false},
   {label: 'Original', value: true},
 ];

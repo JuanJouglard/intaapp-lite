@@ -37,7 +37,7 @@ export class Tour extends Component {
           flex: 1,
           backgroundColor: item.backgroundColor,
           alignItems: 'center',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
           paddingBottom: 100,
         }}>
         <Text style={styles.title}>{item.title}</Text>
@@ -62,20 +62,22 @@ export class Tour extends Component {
 
 const styles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200,
+    maxHeight: '60%',
+    resizeMode: 'contain',
   },
   text: {
     fontSize: 18,
     color: 'white',
     textAlign: 'center',
-    paddingVertical: 30,
+    marginTop: 25,
+    paddingHorizontal: 25,
   },
   title: {
     fontSize: 25,
     color: 'white',
     textAlign: 'center',
     marginBottom: 16,
+    marginTop: 16,
   },
   buttonCircle: {
     width: 40,
