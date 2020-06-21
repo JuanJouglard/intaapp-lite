@@ -11,7 +11,7 @@ export const slides = [
     key: 's2',
     title: 'Elegir imagen',
     text:
-      'Podrá seleccionar una imagen desde la galería o tomar una en el momento utilizando la cámara',
+      'Podrá seleccionar una imagen desde la galería o tomar una foto en el momento utilizando la cámara',
     image: require('../guided-tour/assets/Home.jpg'),
     backgroundColor: '#DB6C79',
   },
@@ -27,7 +27,7 @@ export const slides = [
     key: 's4',
     title: 'Imagen procesada',
     text:
-      'Aquí podrá observar que partes de la imagen han sido detectadas como vegetación. Los sectores que aparecen en negro son detectados como suelo desnudo. También podrá de observar la imagen original.',
+      'Aquí podrá observar que partes de la imagen han sido detectadas como vegetación. Los sectores que aparecen en negro son detectados como suelo desnudo. También podrá observar la imagen original.',
     image: require('../guided-tour/assets/ProcessedImage.png'),
     backgroundColor: '#febe29',
   },
@@ -40,4 +40,3 @@ export const slides = [
     backgroundColor: '#ED4D6E',
   },
 ];
-

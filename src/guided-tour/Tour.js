@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     textAlign: 'center',
-    marginTop: 25,
+    marginTop: 10,
     paddingHorizontal: 25,
   },
   title: {
