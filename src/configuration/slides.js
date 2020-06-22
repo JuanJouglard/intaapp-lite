@@ -3,7 +3,7 @@ export const slides = [
     key: 's1',
     title: 'Bienvenidos',
     text:
-      'Esta app te ayudará a determinar el porcentaje de cubrimiento que presenta un suelo',
+      'Esta app le ayudará a determinar el porcentaje de cubrimiento que presenta un suelo',
     image: null,
     backgroundColor: '#3395ff',
   },
