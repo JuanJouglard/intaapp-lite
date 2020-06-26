@@ -1,117 +1,86 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, {PureComponent} from 'react';
+import {Tour} from './src/guided-tour/Tour';
+import {Icon} from 'native-base';
+import {Home} from './src/core/components/Home';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {ImageView} from './src/core/components/ImageView';
+import AsyncStorage from '@react-native-community/async-storage';
+import {mainThemeColor} from './src/configuration';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+const Stack = createStackNavigator();
+class App extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showRealApp: false,
+    };
+  }
+  async componentDidMount() {
+    let oldUser = await AsyncStorage.getItem('@OldUser');
+    this.setState({
+      showRealApp: oldUser,
+    });
+  }
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  hideTour = show => () => {
+    this.setState({showRealApp: show});
+    AsyncStorage.setItem('@OldUser', 'true');
+  };
 
-import {NativeModules} from 'react-native';
-
-
-const App = () => {
-  const res = NativeModules.NativeOpenCV.test().then(console.log);
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+  render() {
+    if (this.state.showRealApp) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerStyle: {
+                elevation: 0,
+                backgroundColor: mainThemeColor(1),
+              },
+              headerTintColor: '#f5f7f7',
+              headerRight: () => (
+                <TouchableOpacity onPress={this.hideTour(null)}>
+                  <Icon
+                    style={styles.menuicon}
+                    type="FontAwesome5"
+                    name="question-circle"
+                  />
+                </TouchableOpacity>
+              ),
+            }}>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{title: 'Inicio'}}
+            />
+            <Stack.Screen
+              name="Imagen"
+              component={ImageView}
+              options={{
+                title: 'Imagen',
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    } else {
+      if (this.state.showRealApp === false) {
+        return null;
+      } else {
+        return <Tour onDone={this.hideTour(true)} />;
+      }
+    }
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
+  menuicon: {
+    color: '#f5f7f7',
     fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    marginRight: 20,
   },
 });
 
