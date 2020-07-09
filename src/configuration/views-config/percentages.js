@@ -6,7 +6,7 @@ export const percentages = [
   },
   {
     color: '#fce303',
-    title: 'Muerto',
+    title: 'Seco',
     type: 'Yellow',
   },
   {
