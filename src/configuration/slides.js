@@ -3,7 +3,7 @@ export const slides = [
     key: 's1',
     title: 'Bienvenidos',
     text:
-      'Esta app le ayudará a determinar el porcentaje de cubrimiento que presenta un suelo',
+      'Esta app le ayudará a determinar el % de cubrimiento que presenta un suelo',
     image: null,
     backgroundColor: '#3395ff',
   },
@@ -19,7 +19,7 @@ export const slides = [
     key: 's3',
     title: 'Porcentajes',
     text:
-      'En esta vista podrá observar que porcentaje del suelo está cubierto con vegetación viva, muerta o se encuentra sin cubrir',
+      'En esta vista podrá observar que % del suelo está cubierto con vegetación viva, seco o se encuentra sin cubrir',
     image: require('../guided-tour/assets/Percentages2.png'),
     backgroundColor: '#22bcb5',
   },
