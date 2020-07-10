@@ -1,6 +1,13 @@
-import {Button} from 'native-base';
+import {Button, Icon} from 'native-base';
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {mainThemeColor} from '../../configuration';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Popover from 'react-native-popover-view';
 import {imageAdjusts} from '../../configuration';
 import CustomImage from './CustomNativeImage';
@@ -25,6 +32,15 @@ export class ImageEditor extends Component {
         popoverStyle={styles.popover}
         isVisible={this.props.showOver}>
         <View style={styles.imageContainer}>
+          <TouchableOpacity
+            onPress={this.resetAdjustment}
+            style={styles.resetButton}>
+            <Icon
+              type="Ionicons"
+              name="refresh"
+              style={{color: 'white', fontSize: 32}}
+            />
+          </TouchableOpacity>
           <CustomImage
             onSave={this.save}
             saveImage={this.state.saveImg}
@@ -86,6 +102,15 @@ export class ImageEditor extends Component {
       [type]: value,
     });
   };
+
+  resetAdjustment = () => {
+    console.log('Entra reset');
+    this.setState({
+      brightness: imageAdjusts[0].defaultValue,
+      saturation: imageAdjusts[1].defaultValue,
+      contrast: imageAdjusts[2].defaultValue,
+    });
+  };
 }
 
 const styles = StyleSheet.create({
@@ -101,12 +126,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
   },
-  popover: {
-    width: Dimensions.get('screen').width * 0.9,
-    height: Dimensions.get('screen').height * 0.9,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
   image: {
     height: '100%',
     width: '100%',
@@ -117,6 +136,25 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 5,
     paddingTop: 5,
+    position: 'relative',
+  },
+  popover: {
+    width: Dimensions.get('screen').width * 0.9,
+    height: Dimensions.get('screen').height * 0.9,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  resetButton: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+    backgroundColor: mainThemeColor(1),
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    width: 60,
+    zIndex: 99,
   },
   settingsContainer: {
     marginTop: 10,
